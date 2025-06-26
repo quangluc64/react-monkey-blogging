@@ -1,4 +1,9 @@
+import { AuthProvider } from "./contexts/auth-context";
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <div>
+      <AuthProvider></AuthProvider>
+    </div>
+  );
 }
 export default App;
