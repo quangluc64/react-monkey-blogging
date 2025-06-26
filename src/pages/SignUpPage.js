@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 // Để định nghĩa CSS theo cách viết JavaScript (CSS-in-JS)
+import { Label } from "components/label";
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -22,9 +23,6 @@ const SignUpPageStyles = styled.div`
     flex-direction: column;
     align-items: flex-start;
     row-gap: 20px
-  }
-  .label{
-    font-weight: 600;
   }
   .input{
     padding: 25px;
@@ -50,7 +48,7 @@ const SignUpPage = () => {
         <h1 className="heading">Monkey-Blogging</h1>
         <form className="form">
           <div className="field">
-            <label htmlFor="fullname" className="label">Fullname</label>
+            <Label htmlFor="fullname">Fullname</Label>
             <input id="fullname" type="text" className="input" placeholder="Please enter your fullname"/>
           </div>
         </form>
