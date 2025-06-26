@@ -11,6 +11,35 @@ const SignUpPageStyles = styled.div`
     text-align: center;
     color: ${props => props.theme.primary};
     font-size: 40px;
+    margin-bottom: 60px;
+  }
+  form{
+    margin: 0 auto;
+    max-width: 800px;
+  }
+  .field{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 20px
+  }
+  .label{
+    font-weight: 600;
+  }
+  .input{
+    padding: 25px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: ${props => props.theme.grayLight};
+    border: 2px solid transparent;
+    font-weight: 500;
+  }
+  .input::placeholder{
+    color: "#84878B";
+    ;
+  }
+  .input:focus{
+    border-color: ${props => props.theme.primary};;
   }
 `;
 const SignUpPage = () => {
@@ -19,6 +48,12 @@ const SignUpPage = () => {
       <div className="container">
         <img srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`} alt="monkey" className="logo"/>
         <h1 className="heading">Monkey-Blogging</h1>
+        <form className="form">
+          <div className="field">
+            <label htmlFor="fullname" className="label">Fullname</label>
+            <input id="fullname" type="text" className="input" placeholder="Please enter your fullname"/>
+          </div>
+        </form>
       </div>
     </SignUpPageStyles>
   );
