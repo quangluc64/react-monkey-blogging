@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 // Để định nghĩa CSS theo cách viết JavaScript (CSS-in-JS)
 import { Label } from "components/label";
@@ -33,6 +33,7 @@ const SignUpPage = () => {
   const handleSignUp = (values) => {
     console.log(values);
   };
+  const [togglePassword, setTogglePassword] = useState(false);
   return (
     <SignUpPageStyles>
       <div className="container">
@@ -50,8 +51,7 @@ const SignUpPage = () => {
               name="fullname"
               placeholder="Please enter your fullname"
               control={control}
-            >
-            </Input>
+            ></Input>
           </Field>
           <Field>
             <Label htmlFor="email">Email address</Label>
@@ -60,18 +60,27 @@ const SignUpPage = () => {
               name="email"
               placeholder="Please enter your email address"
               control={control}
-            >
-            </Input>
+            ></Input>
           </Field>
           <Field>
             <Label htmlFor="password">Password</Label>
             <Input
-              type="password"
+              type={togglePassword ? "text" : "password"}
               name="password"
               placeholder="Please enter your password"
               control={control}
             >
-              <IconEyeClose className="input-icon"></IconEyeClose>
+              {!togglePassword ? (
+                <IconEyeClose
+                  className="input-icon"
+                  onClick={() => setTogglePassword(true)}
+                ></IconEyeClose>
+              ) : (
+                <IconEyeOpen
+                  className="input-icon"
+                  onClick={() => setTogglePassword(false)}
+                ></IconEyeOpen>
+              )}
             </Input>
           </Field>
         </form>
