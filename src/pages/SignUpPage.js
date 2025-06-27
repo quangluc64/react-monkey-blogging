@@ -5,6 +5,7 @@ import { Label } from "components/label";
 import { Input } from "components/input";
 import { useForm } from "react-hook-form";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
+import { Field } from "components/field";
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -20,12 +21,6 @@ const SignUpPageStyles = styled.div`
   form {
     margin: 0 auto;
     max-width: 800px;
-  }
-  .field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: 20px;
   }
 `;
 const SignUpPage = () => {
@@ -48,7 +43,7 @@ const SignUpPage = () => {
         />
         <h1 className="heading">Monkey-Blogging</h1>
         <form className="form" onSubmit={handleSubmit(handleSignUp)}>
-          <div className="field">
+          <Field>
             <Label htmlFor="fullname">Fullname</Label>
             <Input
               type="text"
@@ -56,9 +51,29 @@ const SignUpPage = () => {
               placeholder="Please enter your fullname"
               control={control}
             >
-              {/* <IconEyeClose className="input-icon"></IconEyeClose> */}
             </Input>
-          </div>
+          </Field>
+          <Field>
+            <Label htmlFor="email">Email address</Label>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Please enter your email address"
+              control={control}
+            >
+            </Input>
+          </Field>
+          <Field>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              name="password"
+              placeholder="Please enter your password"
+              control={control}
+            >
+              <IconEyeClose className="input-icon"></IconEyeClose>
+            </Input>
+          </Field>
         </form>
       </div>
     </SignUpPageStyles>
