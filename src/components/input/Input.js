@@ -22,7 +22,7 @@ const InputStyles = styled.div`
   input:focus {
     border-color: ${(props) => props.theme.primary};
   }
-  .icon-eye{
+  .input-icon{
     position: absolute;
     right: 30px;
     top: 50%;
@@ -39,10 +39,11 @@ const Input = ({
 }) => {
   const { field } = useController({ control, name, defaultValue: "" });
   return (
-    <InputStyles hasIcon={hasIcon}>
+    <InputStyles hasIcon={children ? true : false}>
       <input id={name} type={type} {...field} {...props} />
-      {hasIcon ? <IconEyeOpen className="icon-eye"></IconEyeOpen> : null}
+      {children}
     </InputStyles>
   );
 };
 export default Input;
+
