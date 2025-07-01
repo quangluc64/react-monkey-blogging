@@ -6,6 +6,8 @@ import { Input } from "components/input";
 import { useForm } from "react-hook-form";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Field } from "components/field";
+import { Button } from "components/button";
+import { LoadingSpinner } from "components/loading";
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -28,10 +30,19 @@ const SignUpPage = () => {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-    watch
-  } = useForm({});
+    watch,
+  } = useForm({
+    mode: "onChange",
+  });
   const handleSignUp = (values) => {
     console.log(values);
+    console.log(isSubmitting);
+    if (!isValid) return;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 5000);
+    });
   };
   const [togglePassword, setTogglePassword] = useState(false);
   return (
@@ -83,6 +94,9 @@ const SignUpPage = () => {
               )}
             </Input>
           </Field>
+          <Button type="submit" isLoading={isSubmitting} disabled = {isSubmitting} style={{ maxWidth: "350px" }}>
+            SignUp
+          </Button>
         </form>
       </div>
     </SignUpPageStyles>
