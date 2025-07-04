@@ -1,21 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Authentication from "./Authentication";
 import { Button } from "components/button";
 import { Input } from "components/input";
 import { Label } from "components/label";
 import { Field } from "components/field";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "firebase-app/firebase-config";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "contexts/auth-context";
+import { IconEyeClose, IconEyeOpen } from "components/icon";
+const schema = yup.object({
+  email: yup.string().required("Please enter your email"),
+  password: yup
+    .string()
+    .required("Please enter your password")
+    .min(8, "Password must have at least 8 characters"),
+});
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const { userInfo } = useAuth();
   const {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
+    resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const handleSignIn = () => {
-
-  }
+  // useEffect(() => {
+  //   if (userInfo.email) {
+  //     // Nếu đã đăng nhập rồi thì chuyển sang trang chủ
+  //     navigate("/");
+  //   }
+  // }, [userInfo]); // theo dõi khi userInfo thay đổi
+  console.log(userInfo);
+  const [togglePassword, setTogglePassword] = useState(false);
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0)
+      toast.error(arrErrors[0].message, {
+        pauseOnHover: false,
+      });
+  }, [errors]);
+  const handleSignIn = async (values) => {
+    if (!isValid) return;
+    await signInWithEmailAndPassword(auth, values.email, values.password);
+    toast.success("Login successfully!");
+    navigate("/");
+  };
   return (
     <Authentication>
       <form className="form" onSubmit={handleSubmit(handleSignIn)}>
@@ -31,11 +67,24 @@ const SignInPage = () => {
         <Field>
           <Label htmlFor="password">Password</Label>
           <Input
-            type="password"
+            type={togglePassword ? "text" : "password"}
             name="password"
             placeholder="Please enter your password"
             control={control}
-          ></Input>
+          >
+            {" "}
+            {!togglePassword ? (
+              <IconEyeClose
+                className="input-icon"
+                onClick={() => setTogglePassword(true)}
+              ></IconEyeClose>
+            ) : (
+              <IconEyeOpen
+                className="input-icon"
+                onClick={() => setTogglePassword(false)}
+              ></IconEyeOpen>
+            )}
+          </Input>
         </Field>
         <Button
           type="submit"
@@ -43,7 +92,7 @@ const SignInPage = () => {
           disabled={isSubmitting}
           style={{ maxWidth: "350px" }}
         >
-          SignUp
+          Login
         </Button>
       </form>
     </Authentication>
