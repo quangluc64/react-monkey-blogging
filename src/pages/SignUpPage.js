@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Để định nghĩa CSS theo cách viết JavaScript (CSS-in-JS)
 import { Label } from "components/label";
@@ -9,6 +9,7 @@ import { Field } from "components/field";
 import { Button } from "components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -29,7 +30,10 @@ const SignUpPageStyles = styled.div`
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
   email: yup.string().required("Please enter your email"),
-  password: yup.string().required("Please enter your password").min(8, "Password must have at least 8 characters"),
+  password: yup
+    .string()
+    .required("Please enter your password")
+    .min(8, "Password must have at least 8 characters"),
 });
 const SignUpPage = () => {
   const {
@@ -52,7 +56,13 @@ const SignUpPage = () => {
     });
   };
   const [togglePassword, setTogglePassword] = useState(false);
-  console.log(errors);
+  useEffect(() => {
+    const arrErrors = Object.values(errors);
+    if (arrErrors.length > 0)
+      toast.error(arrErrors[0].message, {
+        pauseOnHover: false,
+      });
+  }, [errors]);
   return (
     <SignUpPageStyles>
       <div className="container">
