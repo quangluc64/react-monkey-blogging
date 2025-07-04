@@ -10,6 +10,10 @@ import { Button } from "components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "firebase-app/firebase-config";
+import { addDoc, collection } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -36,6 +40,7 @@ const schema = yup.object({
     .min(8, "Password must have at least 8 characters"),
 });
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -45,15 +50,24 @@ const SignUpPage = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const handleSignUp = (values) => {
-    console.log(values);
-    console.log(isSubmitting);
+  const handleSignUp = async (values) => {
     if (!isValid) return;
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 5000);
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      values.email,
+      values.password
+    );
+    await updateProfile(auth.currentUser, {
+      displayName: values.fullname,// default fullname = null
     });
+    const userRef = collection(db, "users");
+    await addDoc(userRef, {
+      fullname: values.fullname,
+      email: values.email,
+      password: values.password
+    })
+    toast.success("Register successfully!");
+    navigate("/");
   };
   const [togglePassword, setTogglePassword] = useState(false);
   useEffect(() => {
