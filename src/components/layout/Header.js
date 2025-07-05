@@ -1,17 +1,18 @@
 import { Button } from "components/button";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const menuLinks = [
   {
-    url: "/#",
+    url: "/",
     title: "Home",
   },
   {
-    url: "/#",
+    url: "/blog",
     title: "Blog",
   },
   {
-    url: "/#",
+    url: "/contact",
     title: "Contact",
   },
 ];
@@ -69,19 +70,19 @@ const Header = () => {
     <HeaderStyles>
       <div className="container">
         <div className="header-main">
-          <a href="/">
+          <NavLink to="/">
             <img
               srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`}
-              alt="logo"
+              alt="monkey-blogging"
               className="logo"
             />
-          </a>
+          </NavLink>
           <ul className="menu">
             {menuLinks.map((item) => (
               <li className="menu-item">
-                <a className="menu-link" href={item.url}>
+                <NavLink to={item.url} className="menu-link" >
                   {item.title}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -125,6 +126,7 @@ const Header = () => {
           <Button
             type="button"
             className="header-button"
+            height="56px"
             style={{
               maxWidth: "200px",
             }}

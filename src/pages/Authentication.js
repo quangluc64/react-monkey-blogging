@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const AuthenticationStyles = styled.div`
   min-height: 100vh;
@@ -16,10 +17,10 @@ const AuthenticationStyles = styled.div`
     margin: 0 auto;
     max-width: 800px;
   }
-  .have-account{
+  .have-account {
     margin-bottom: 20px;
-    a{
-      color: ${props => props.theme.primary};
+    a {
+      color: ${(props) => props.theme.primary};
       font-weight: 500;
     }
   }
@@ -28,11 +29,13 @@ const Authentication = ({ children }) => {
   return (
     <AuthenticationStyles>
       <div className="container">
-        <img
-          srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`}
-          alt="monkey"
-          className="logo"
-        />
+        <NavLink to="/">
+          <img
+            srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`}
+            alt="monkey"
+            className="logo"
+          />
+        </NavLink>
         <h1 className="heading">Monkey-Blogging</h1>
         {children}
       </div>
