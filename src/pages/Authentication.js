@@ -16,6 +16,13 @@ const AuthenticationStyles = styled.div`
     margin: 0 auto;
     max-width: 800px;
   }
+  .have-account{
+    margin-bottom: 20px;
+    a{
+      color: ${props => props.theme.primary};
+      font-weight: 500;
+    }
+  }
 `;
 const Authentication = ({ children }) => {
   return (

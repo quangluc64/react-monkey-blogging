@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "firebase-app/firebase-config";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "contexts/auth-context";
 import { IconEyeClose, IconEyeOpen } from "components/icon";
 const schema = yup.object({
@@ -31,14 +31,13 @@ const SignInPage = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  // useEffect(() => {
-  //   if (userInfo.email) {
-  //     // Nếu đã đăng nhập rồi thì chuyển sang trang chủ
-  //     navigate("/");
-  //   }
-  // }, [userInfo]); // theo dõi khi userInfo thay đổi
-  console.log(userInfo);
   const [togglePassword, setTogglePassword] = useState(false);
+  useEffect(() => {
+    if (userInfo?.email) {
+      navigate("/");
+    }
+  }, []);
+  console.log(userInfo);
   useEffect(() => {
     const arrErrors = Object.values(errors);
     if (arrErrors.length > 0)
@@ -86,6 +85,9 @@ const SignInPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          You have not had an account ? <NavLink to={"/sign-up"}>Register an account</NavLink>
+        </div>
         <Button
           type="submit"
           isLoading={isSubmitting}

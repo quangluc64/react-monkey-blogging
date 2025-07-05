@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
 import { addDoc, collection } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Authentication from "./Authentication";
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
@@ -103,6 +103,9 @@ const SignUpPage = () => {
             )}
           </Input>
         </Field>
+        <div className="have-account">
+          You already have an account ? <NavLink to={"/sign-in"}>Login</NavLink>
+        </div>
         <Button
           type="submit"
           isLoading={isSubmitting}
