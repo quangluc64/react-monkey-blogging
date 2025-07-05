@@ -36,7 +36,7 @@ const SignInPage = () => {
     if (userInfo?.email) {
       navigate("/");
     }
-  }, []);
+  }, [userInfo]);
   console.log(userInfo);
   useEffect(() => {
     const arrErrors = Object.values(errors);

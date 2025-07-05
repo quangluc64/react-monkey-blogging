@@ -1,4 +1,5 @@
 import { Button } from "components/button";
+import { useAuth } from "contexts/auth-context";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -44,6 +45,7 @@ const HeaderStyles = styled.div`
   .search {
     display: flex;
     position: relative;
+    margin-right: 20px;
     margin-left: auto;
     width: 100%;
     max-width: 320px;
@@ -61,11 +63,12 @@ const HeaderStyles = styled.div`
     transform: translateY(-50%);
   }
   .header-button {
-    margin-left: 20px;
     margin-right: 0;
   }
 `;
 const Header = () => {
+  const { userInfo } = useAuth();
+  console.log("userInfo", userInfo);
   return (
     <HeaderStyles>
       <div className="container">
@@ -78,9 +81,9 @@ const Header = () => {
             />
           </NavLink>
           <ul className="menu">
-            {menuLinks.map((item) => (
-              <li className="menu-item">
-                <NavLink to={item.url} className="menu-link" >
+            {menuLinks.map((item, index) => (
+              <li className="menu-item" key={index}>
+                <NavLink to={item.url} className="menu-link">
                   {item.title}
                 </NavLink>
               </li>
@@ -123,16 +126,26 @@ const Header = () => {
               </svg>
             </span>
           </div>
-          <Button
-            type="button"
-            className="header-button"
-            height="56px"
-            style={{
-              maxWidth: "200px",
-            }}
-          >
-            SignUp
-          </Button>
+          {!userInfo ? (
+            <NavLink to="/sign-up">
+              <Button
+                to="/sign-in"
+                type="button"
+                className="header-button"
+                height="56px"
+                style={{
+                  maxWidth: "200px",
+                }}
+              >
+                SignUp
+              </Button>
+            </NavLink>
+          ) : (
+            <div className="header-auth">
+              <span>Welcome back, </span>
+              <strong className="text-primary">{userInfo.displayName || "User"}</strong>
+            </div>
+          )}
         </div>
       </div>
     </HeaderStyles>
