@@ -86,13 +86,14 @@ const SignInPage = () => {
           </Input>
         </Field>
         <div className="have-account">
-          You have not had an account ? <NavLink to={"/sign-up"}>Register an account</NavLink>
+          You have not had an account ?{" "}
+          <NavLink to={"/sign-up"}>Register an account</NavLink>
         </div>
         <Button
           type="submit"
           isLoading={isSubmitting}
           disabled={isSubmitting}
-          style={{ maxWidth: "350px" }}
+          style={{ width: "100%", maxWidth: "350px" }}
         >
           Login
         </Button>
