@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import featureItemImg from "assets/images/feature-item-img.jpg";
 import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
 const PostFeatureItemStyles = styled.div`
   position: relative;
   width: 100%;
@@ -41,9 +42,6 @@ const PostFeatureItemStyles = styled.div`
   }
   .post-title {
     margin-top: 20px;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 28px;
   }
 `;
 const PostFeatureItem = () => {
@@ -63,9 +61,7 @@ const PostFeatureItem = () => {
             <span className="post-author">Andiez Le</span>
           </div>
         </div>
-        <h3 className="post-title">
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-        </h3>
+        <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       </div>
     </PostFeatureItemStyles>
   );

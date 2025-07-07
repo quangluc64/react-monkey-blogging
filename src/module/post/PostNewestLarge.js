@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import newestLargeImg from "assets/images/newest-large-img.jpg";
 import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
 const PostNewestLargeStyles = styled.div`
   max-width: 570px;
   .post-img {
@@ -18,9 +19,6 @@ const PostNewestLargeStyles = styled.div`
   }
   .post-title {
     margin-top: 10px;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 28px;
   }
   .post-info {
     margin-top: 10px;
@@ -49,9 +47,7 @@ const PostNewestLarge = () => {
         <img src={newestLargeImg} alt="" className="post-img" />
       </div>
       <PostCategory>Kiến thức</PostCategory>
-      <h3 className="post-title">
-        Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-      </h3>
+      <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       <div className="post-info">
         <span className="post-date">Mar 23</span>
         <span className="post-dot"></span>

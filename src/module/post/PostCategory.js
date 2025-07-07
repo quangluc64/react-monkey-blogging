@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 const PostCategoryStyles = styled.span`
   display: inline-block;
@@ -19,12 +20,16 @@ const PostCategoryStyles = styled.span`
       background-color: #fff;
     `};
 `;
-const PostCategory = ({ children, type = "primary", className = "" }) => {
+const PostCategory = ({
+  children,
+  type = "primary",
+  className = "",
+  to = "/",
+}) => {
   return (
     <PostCategoryStyles type={type} className={`post-category ${className}`}>
-      {children}
+      <NavLink to={to}>{children}</NavLink>
     </PostCategoryStyles>
   );
 };
 export default PostCategory;
-

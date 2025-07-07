@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import postItemImg from "assets/images/post-item-img.jpeg";
 import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
 const PostItemStyles = styled.div`
   /* max-width: 270px; */
   font-family: "Montserrat", sans-serif;
@@ -20,9 +21,6 @@ const PostItemStyles = styled.div`
   }
   .post-title {
     margin-top: 15px;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
   }
   .post-info {
     margin-top: 15px;
@@ -51,9 +49,7 @@ const PostItem = () => {
         <img src={postItemImg} alt="" className="post-img" />
       </div>
       <PostCategory>Kiến thức</PostCategory>
-      <h3 className="post-title">
-        Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-      </h3>
+      <PostTitle>Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       <div className="post-info">
         <span className="post-date">Mar 23</span>
         <span className="post-dot"></span>
