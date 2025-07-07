@@ -2,7 +2,8 @@ import { Button } from "components/button";
 import React from "react";
 import styled from "styled-components";
 const HomeBannerStyles = styled.div`
-  margin-top: 40px;
+  padding: 40px 0;
+  margin-bottom: 60px;
   min-height: 520px;
   background-image: linear-gradient(
     to bottom right,

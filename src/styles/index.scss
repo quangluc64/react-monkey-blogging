@@ -60,3 +60,15 @@ body {
 .text-primary{
   color: #2EBAC1;
 }
+.home-block{
+  padding-bottom: 60px;
+  font-family: "Montserrat", sans-serif;
+}
+.grid-layout{
+  display: grid;
+  gap: 50px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  &--primary{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

@@ -3,17 +3,10 @@ import PostFeatureItem from "module/post/PostFeatureItem";
 import React from "react";
 import styled from "styled-components";
 const HomeFeatureStyles = styled.div`
-  font-family: "Montserrat", sans-serif;
-  margin-top: 60px;
-  .grid-layout{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 50px;
-  }
 `;
 const HomeFeature = () => {
   return (
-    <HomeFeatureStyles>
+    <HomeFeatureStyles className="home-block">
       <div className="container">
         <Heading>Feature</Heading>
         <div className="grid-layout">

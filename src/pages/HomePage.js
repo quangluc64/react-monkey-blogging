@@ -2,7 +2,6 @@ import Layout from "components/layout/Layout";
 import HomeBanner from "module/home/HomeBanner";
 import HomeFeature from "module/home/HomeFeature";
 import HomeNewest from "module/home/HomeNewest";
-import PostItem from "module/post/PostItem";
 import React from "react";
 const HomePage = () => {
   return (
