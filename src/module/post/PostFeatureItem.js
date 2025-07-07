@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import featureItemImg from "assets/images/feature-item-img.jpg";
+import PostCategory from "./PostCategory";
 const PostFeatureItemStyles = styled.div`
   position: relative;
   width: 100%;
@@ -24,15 +25,6 @@ const PostFeatureItemStyles = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  .post-category {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #f3edff;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 18px;
-    color: #6b6b6b;
   }
   .post-info {
     display: flex;
@@ -64,7 +56,7 @@ const PostFeatureItem = () => {
       />
       <div className="post-content">
         <div className="post-top">
-          <span className="post-category">Kiến thức</span>
+          <PostCategory>Kiến thức</PostCategory>
           <div className="post-info">
             <span className="post-date">Mar 23</span>
             <span className="post-dot"></span>

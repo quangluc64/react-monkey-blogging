@@ -3,5 +3,7 @@ export const theme = {
   secondary: "#A4D96C",
   tertiary: "#3A1097",
   grayDark: "#292D32",
-  grayLight: "#E7ECF3"
+  grayLight: "#E7ECF3",
+  gray6B: "#6b6b6b",
+  grayF3: "#f3edff",
 };

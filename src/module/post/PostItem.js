@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import postItemImg from "assets/images/post-item-img.jpeg";
+import PostCategory from "./PostCategory";
 const PostItemStyles = styled.div`
   /* max-width: 270px; */
   font-family: "Montserrat", sans-serif;
@@ -15,15 +16,7 @@ const PostItemStyles = styled.div`
     border-radius: 20px;
   }
   .post-category {
-    display: inline-block;
     margin-top: 20px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #f3edff;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 18px;
-    color: #6b6b6b;
   }
   .post-title {
     margin-top: 15px;
@@ -57,7 +50,7 @@ const PostItem = () => {
       <div className="post-img">
         <img src={postItemImg} alt="" className="post-img" />
       </div>
-      <span className="post-category">Kiến thức</span>
+      <PostCategory>Kiến thức</PostCategory>
       <h3 className="post-title">
         Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
       </h3>

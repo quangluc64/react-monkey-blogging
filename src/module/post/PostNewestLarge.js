@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import newestLargeImg from "assets/images/newest-large-img.jpg";
+import PostCategory from "./PostCategory";
 const PostNewestLargeStyles = styled.div`
   max-width: 570px;
   .post-img {
@@ -13,15 +14,7 @@ const PostNewestLargeStyles = styled.div`
     border-radius: 20px;
   }
   .post-category {
-    display: inline-block;
     margin-top: 25px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #f3edff;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 18px;
-    color: #6b6b6b;
   }
   .post-title {
     margin-top: 10px;
@@ -55,7 +48,7 @@ const PostNewestLarge = () => {
       <div className="post-img">
         <img src={newestLargeImg} alt="" className="post-img" />
       </div>
-      <span className="post-category">Kiến thức</span>
+      <PostCategory>Kiến thức</PostCategory>
       <h3 className="post-title">
         Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
       </h3>
