@@ -4,6 +4,7 @@ import newestItemImg from "assets/images/newest-item-img.jpeg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
+import PostImage from "./PostImage";
 const PostNewestItemStyles = styled.div`
   display: flex;
   align-items: center;
@@ -21,12 +22,9 @@ const PostNewestItemStyles = styled.div`
       flex-shrink: 0;
       width: 180px;
       height: 130px;
+      border-radius: 12px;
       img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
         object-position: center 80%;
-        border-radius: 12px;
       }
     }
     &-title {
@@ -40,9 +38,7 @@ const PostNewestItemStyles = styled.div`
 const PostNewestItem = () => {
   return (
     <PostNewestItemStyles>
-      <div className="post-img">
-        <img src={newestItemImg} alt="" />
-      </div>
+      <PostImage url={newestItemImg}></PostImage>
       <div className="post-content">
         <PostCategory type="secondary">Kiến thức</PostCategory>
         <PostTitle>

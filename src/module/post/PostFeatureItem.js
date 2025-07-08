@@ -4,6 +4,7 @@ import featureItemImg from "assets/images/feature-item-img.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
+import PostImage from "./PostImage";
 const PostFeatureItemStyles = styled.div`
   position: relative;
   width: 100%;
@@ -14,9 +15,8 @@ const PostFeatureItemStyles = styled.div`
   .post-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     border-radius: 20px;
-    transform: scale(2);
+    /* transform: scale(2); */
   }
   .post-content {
     position: absolute;
@@ -38,11 +38,7 @@ const PostFeatureItemStyles = styled.div`
 const PostFeatureItem = () => {
   return (
     <PostFeatureItemStyles>
-      <img
-        src={featureItemImg}
-        alt="unsplash"
-        className="post-img"
-      />
+      <PostImage url={featureItemImg}></PostImage>
       <div className="post-content">
         <div className="post-top">
           <PostCategory>Kiến thức</PostCategory>

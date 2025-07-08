@@ -4,15 +4,11 @@ import newestLargeImg from "assets/images/newest-large-img.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
+import PostImage from "./PostImage";
 const PostNewestLargeStyles = styled.div`
-  max-width: 570px;
+  /* max-width: 570px; */
   .post-img {
     height: 430px;
-  }
-  .post-img img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     border-radius: 20px;
   }
   .post-category {
@@ -28,9 +24,7 @@ const PostNewestLargeStyles = styled.div`
 const PostNewestLarge = () => {
   return (
     <PostNewestLargeStyles>
-      <div className="post-img">
-        <img src={newestLargeImg} alt="" className="post-img" />
-      </div>
+      <PostImage url={newestLargeImg}></PostImage>
       <PostCategory>Kiến thức</PostCategory>
       <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       <PostMeta></PostMeta>
