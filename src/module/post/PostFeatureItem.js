@@ -3,6 +3,7 @@ import styled from "styled-components";
 import featureItemImg from "assets/images/feature-item-img.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
+import PostMeta from "./PostMeta";
 const PostFeatureItemStyles = styled.div`
   position: relative;
   width: 100%;
@@ -27,21 +28,11 @@ const PostFeatureItemStyles = styled.div`
     align-items: center;
     justify-content: space-between;
   }
-  .post-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-  }
-  .post-dot {
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background-color: currentColor;
-  }
   .post-title {
     margin-top: 20px;
+  }
+  .post-info{
+    color: inherit;
   }
 `;
 const PostFeatureItem = () => {
@@ -55,11 +46,7 @@ const PostFeatureItem = () => {
       <div className="post-content">
         <div className="post-top">
           <PostCategory>Kiến thức</PostCategory>
-          <div className="post-info">
-            <span className="post-date">Mar 23</span>
-            <span className="post-dot"></span>
-            <span className="post-author">Andiez Le</span>
-          </div>
+          <PostMeta></PostMeta>
         </div>
         <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       </div>
