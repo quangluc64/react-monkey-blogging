@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 // import styled from "styled-components";
 // Để định nghĩa CSS theo cách viết JavaScript (CSS-in-JS)
 import { Label } from "components/label";
 import { Input } from "components/input";
 import { useForm } from "react-hook-form";
-import { IconEyeClose, IconEyeOpen } from "components/icon";
 import { Field } from "components/field";
 import { Button } from "components/button";
 import * as yup from "yup";
@@ -15,6 +14,7 @@ import { auth, db } from "firebase-app/firebase-config";
 import { addDoc, collection } from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import Authentication from "./Authentication";
+import InputPasswordToggle from "components/input/InputPasswordToggle";
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
   email: yup.string().required("Please enter your email"),
@@ -53,7 +53,6 @@ const SignUpPage = () => {
     toast.success("Register successfully!");
     navigate("/");
   };
-  const [togglePassword, setTogglePassword] = useState(false);
   useEffect(() => {
     const arrErrors = Object.values(errors);
     if (arrErrors.length > 0)
@@ -84,24 +83,7 @@ const SignUpPage = () => {
         </Field>
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            type={togglePassword ? "text" : "password"}
-            name="password"
-            placeholder="Please enter your password"
-            control={control}
-          >
-            {!togglePassword ? (
-              <IconEyeClose
-                className="input-icon"
-                onClick={() => setTogglePassword(true)}
-              ></IconEyeClose>
-            ) : (
-              <IconEyeOpen
-                className="input-icon"
-                onClick={() => setTogglePassword(false)}
-              ></IconEyeOpen>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           You already have an account ? <NavLink to={"/sign-in"}>Login</NavLink>
@@ -110,9 +92,10 @@ const SignUpPage = () => {
           type="submit"
           isLoading={isSubmitting}
           disabled={isSubmitting}
-          style={{ 
+          style={{
             width: "100%",
-            maxWidth: "350px" }}
+            maxWidth: "350px",
+          }}
         >
           SignUp
         </Button>
