@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import newestItemImg from "assets/images/newest-item-img.jpeg";
+import homeNewestItemImg from "assets/images/home-newest-item.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
@@ -38,7 +38,7 @@ const PostNewestItemStyles = styled.div`
 const PostNewestItem = () => {
   return (
     <PostNewestItemStyles>
-      <PostImage url={newestItemImg}></PostImage>
+      <PostImage url={homeNewestItemImg}></PostImage>
       <div className="post-content">
         <PostCategory type="secondary">Kiến thức</PostCategory>
         <PostTitle>

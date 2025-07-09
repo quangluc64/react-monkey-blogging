@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import featureItemImg from "assets/images/feature-item-img.jpg";
+import homeFeatureItemImg from "assets/images/home-feature-item.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
@@ -17,6 +17,14 @@ const PostFeatureItemStyles = styled.div`
     height: 100%;
     border-radius: 20px;
     /* transform: scale(2); */
+  }
+  .post-overlay{
+    position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background-color: rgba(0, 0, 0, 0.75);
+      mix-blend-mode: multiply;
+      opacity: 0.6;
   }
   .post-content {
     position: absolute;
@@ -38,7 +46,8 @@ const PostFeatureItemStyles = styled.div`
 const PostFeatureItem = () => {
   return (
     <PostFeatureItemStyles>
-      <PostImage url={featureItemImg}></PostImage>
+      <PostImage url={homeFeatureItemImg}></PostImage>
+      <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
           <PostCategory>Kiến thức</PostCategory>

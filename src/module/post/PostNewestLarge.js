@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import newestLargeImg from "assets/images/newest-large-img.jpg";
+import homeNewestLargeImg from "assets/images/home-newest-large.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
@@ -24,7 +24,7 @@ const PostNewestLargeStyles = styled.div`
 const PostNewestLarge = () => {
   return (
     <PostNewestLargeStyles>
-      <PostImage url={newestLargeImg}></PostImage>
+      <PostImage url={homeNewestLargeImg}></PostImage>
       <PostCategory>Kiến thức</PostCategory>
       <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
       <PostMeta></PostMeta>

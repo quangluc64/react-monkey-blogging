@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import postItemImg from "assets/images/post-item-img.jpeg";
+import postListItemImg from "assets/images/post-list-item.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
@@ -26,7 +26,7 @@ const PostItemStyles = styled.div`
 const PostItem = () => {
   return (
     <PostItemStyles>
-      <PostImage url={postItemImg}></PostImage>
+      <PostImage url={postListItemImg}></PostImage>
       <PostCategory>Kiến thức</PostCategory>
       <PostTitle>
         Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
