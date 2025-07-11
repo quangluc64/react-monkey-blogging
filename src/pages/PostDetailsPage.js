@@ -160,7 +160,7 @@ const PostDetailsPage = () => {
                 fall-off-the-bone butternut chuck rice burgers.
               </p>
               <figure>
-                <img src={postDetailSub} alt="" />
+                <img src={postDetailSub} alt="" loading="lazy"/>
                 <figcaption>
                   Gastronomy atmosphere set aside. Slice butternut cooking home.
                 </figcaption>
@@ -180,7 +180,7 @@ const PostDetailsPage = () => {
             </div>
             <div className="author">
               <div className="author-img">
-                <img src={postDetailAuthor} alt="" />
+                <img src={postDetailAuthor} alt="" loading="lazy"/>
               </div>
               <div className="author-content">
                 <h3 className="author-name">Nguyễn Ngọc Lan Anh</h3>

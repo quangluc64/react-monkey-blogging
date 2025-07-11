@@ -11,6 +11,7 @@ const AuthenticationStyles = styled.div`
     text-align: center;
     color: ${(props) => props.theme.primary};
     font-size: 40px;
+    font-weight: 600;
     margin-bottom: 60px;
   }
   form {
