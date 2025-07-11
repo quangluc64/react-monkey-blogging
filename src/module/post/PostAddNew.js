@@ -6,24 +6,31 @@ import { Input } from "components/input";
 import { Label } from "components/label";
 import React from "react";
 import { useForm } from "react-hook-form";
+import slugify from "react-slugify";
 import styled from "styled-components";
+import { postStatus } from "utils/constants";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
-  const { control, watch, setValue } = useForm({
+  const { control, watch, setValue, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
-      status: "",
+      title: "",
+      slug: "",
+      status: 2,
       category: "",
     },
   });
   const watchStatus = watch("status");
   const watchCategory = watch("category");
-  console.log("PostAddNew ~ watchCategory", watchCategory);
+  const addPostHandler = async (values) => {
+    values.slug = slugify(values.slug || values.title);
+    // console.log(values);
+  }
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
-      <form>
+      <form onSubmit={handleSubmit(addPostHandler)}>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Title</Label>
@@ -49,27 +56,24 @@ const PostAddNew = () => {
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "approved"}
-                onClick={() => setValue("status", "approved")}
-                value="approved"
+                checked={Number(watchStatus) === postStatus.APPROVED}
+                value={1}
               >
                 Approved
               </Radio>
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "pending"}
-                onClick={() => setValue("status", "pending")}
-                value="pending"
+                checked={Number(watchStatus) === postStatus.PENDING}
+                value={2}
               >
                 Pending
               </Radio>
               <Radio
                 name="status"
                 control={control}
-                checked={watchStatus === "reject"}
-                onClick={() => setValue("status", "reject")}
-                value="reject"
+                checked={Number(watchStatus) === postStatus.REJECTED}
+                value={3}
               >
                 Reject
               </Radio>
