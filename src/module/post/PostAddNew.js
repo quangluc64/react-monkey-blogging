@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import slugify from "react-slugify";
 import styled from "styled-components";
 import { postStatus } from "utils/constants";
-const PostAddNewStyles = styled.div``;
+import { useState } from "react";
 
+const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
   const { control, watch, setValue, handleSubmit } = useForm({
     mode: "onChange",
@@ -19,14 +20,42 @@ const PostAddNew = () => {
       slug: "",
       status: 2,
       category: "",
+      image: "", // thêm trường này
     },
   });
   const watchStatus = watch("status");
   const watchCategory = watch("category");
+  const [imageFile, setImageFile] = useState(null);
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "unsigned_preset"); // thay bằng preset của bạn nếu khác
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dqpdddmjn/image/upload`, // cloud_name = dqpdddmjn
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+      return data.secure_url; // trả về link ảnh nếu thành công
+    } catch (error) {
+      console.error("Upload image failed", error);
+      return null;
+    }
+  };
   const addPostHandler = async (values) => {
     values.slug = slugify(values.slug || values.title);
-    // console.log(values);
-  }
+    // Nếu người dùng đã chọn ảnh
+    if (imageFile) {
+      const imageUrl = await uploadImageToCloudinary(imageFile);
+      values.image = imageUrl;
+      setValue("image", imageUrl);
+    }
+    console.log("Submit form with:", values);
+  };
+
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -80,8 +109,12 @@ const PostAddNew = () => {
             </div>
           </Field>
           <Field>
-            <Label>Author</Label>
-            <Input control={control} placeholder="Find the author"></Input>
+            <Label>Image</Label>
+            <input
+              type="file"
+              name="image"
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
           </Field>
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
