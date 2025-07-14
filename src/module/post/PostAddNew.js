@@ -1,5 +1,5 @@
 import { Button } from "components/button";
-import { Checkbox, Radio } from "components/checkbox";
+import { Radio } from "components/checkbox";
 import { Dropdown } from "components/dropdown";
 import { Field } from "components/field";
 import { Input } from "components/input";
@@ -10,50 +10,49 @@ import slugify from "react-slugify";
 import styled from "styled-components";
 import { postStatus } from "utils/constants";
 import { useState } from "react";
-
+import { ImageUpload } from "components/image";
+import axios from "axios";
 const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
-  const { control, watch, setValue, handleSubmit } = useForm({
+  const { control, watch, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
       slug: "",
       status: 2,
       category: "",
-      image: "", // thêm trường này
     },
   });
   const watchStatus = watch("status");
-  const watchCategory = watch("category");
-  const [imageFile, setImageFile] = useState(null);
-  const uploadImageToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "unsigned_preset"); // thay bằng preset của bạn nếu khác
+  const [image, setImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
+  const onSelectImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    setPreviewImage(URL.createObjectURL(file));
+  };
+  const handleUploadImage = async () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", process.env.REACT_APP_PRESET_NAME);
+    data.append("cloud_name", process.env.REACT_APP_CLOUD_NAME);
+    data.append("folder", "monkey-blogging");
     try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/dqpdddmjn/image/upload`, // cloud_name = dqpdddmjn
-        {
-          method: "POST",
-          body: formData,
-        }
+      const resp = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+        data
       );
-      const data = await response.json();
-      return data.secure_url; // trả về link ảnh nếu thành công
-    } catch (error) {
-      console.error("Upload image failed", error);
-      return null;
+      return { url: resp.data.url, public_id: resp.data.public_id };
+    } catch (err) {
+      console.log("error : ", err);
     }
   };
   const addPostHandler = async (values) => {
     values.slug = slugify(values.slug || values.title);
-    // Nếu người dùng đã chọn ảnh
-    if (imageFile) {
-      const imageUrl = await uploadImageToCloudinary(imageFile);
-      values.image = imageUrl;
-      setValue("image", imageUrl);
-    }
-    console.log("Submit form with:", values);
+    const uploaded = await handleUploadImage();
+    values.image = uploaded.url;
+    console.log("Dữ liệu gửi đi:", values);
   };
 
   return (
@@ -79,6 +78,10 @@ const PostAddNew = () => {
           </Field>
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
+          <Field>
+            <Label>Image</Label>
+            <ImageUpload onChange={onSelectImage} image={previewImage}></ImageUpload>
+          </Field>
           <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
@@ -107,14 +110,6 @@ const PostAddNew = () => {
                 Reject
               </Radio>
             </div>
-          </Field>
-          <Field>
-            <Label>Image</Label>
-            <input
-              type="file"
-              name="image"
-              onChange={(e) => setImageFile(e.target.files[0])}
-            />
           </Field>
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
