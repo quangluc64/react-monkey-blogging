@@ -9,9 +9,8 @@ import { useForm } from "react-hook-form";
 import slugify from "react-slugify";
 import styled from "styled-components";
 import { postStatus } from "utils/constants";
-import { useState } from "react";
 import { ImageUpload } from "components/image";
-import axios from "axios";
+import useCloudinaryImage from "hooks/useCloudinaryImage";
 const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
   const { control, watch, handleSubmit } = useForm({
@@ -24,34 +23,7 @@ const PostAddNew = () => {
     },
   });
   const watchStatus = watch("status");
-  const [image, setImage] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const onSelectImage = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImage(file);
-    setPreviewImage(URL.createObjectURL(file));
-  };
-  const handleUploadImage = async () => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", process.env.REACT_APP_PRESET_NAME);
-    data.append("cloud_name", process.env.REACT_APP_CLOUD_NAME);
-    data.append("folder", "monkey-blogging");
-    try {
-      const resp = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
-        data
-      );
-      return { url: resp.data.url, public_id: resp.data.public_id };
-    } catch (err) {
-      console.log("error : ", err);
-    }
-  };
-  const handleDeleteImage = () => {
-    setImage(""); // ảnh gốc
-    setPreviewImage(""); // ảnh preview
-  };
+  const {onSelectImage, handleUploadImage, handleDeleteImage, previewImage} = useCloudinaryImage();
   const addPostHandler = async (values) => {
     values.slug = slugify(values.slug || values.title);
     const uploaded = await handleUploadImage();
