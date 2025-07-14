@@ -4,33 +4,37 @@ import { Dropdown } from "components/dropdown";
 import { Field } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import slugify from "react-slugify";
 import styled from "styled-components";
 import { postStatus } from "utils/constants";
 import { ImageUpload } from "components/image";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
+import { Toggle } from "components/toggle";
 const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
-  const { control, watch, handleSubmit } = useForm({
+  const { control, watch, handleSubmit, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
       slug: "",
       status: 2,
+      image: "",
+      hot: false,
       category: "",
     },
   });
   const watchStatus = watch("status");
-  const {onSelectImage, handleUploadImage, handleDeleteImage, previewImage} = useCloudinaryImage();
+  const watchHot = watch("hot");
+  const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
+    useCloudinaryImage();
   const addPostHandler = async (values) => {
     values.slug = slugify(values.slug || values.title);
-    const uploaded = await handleUploadImage();
-    values.image = uploaded.url;
+    // const uploaded = await handleUploadImage();
+    // values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
   };
-
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -94,14 +98,15 @@ const PostAddNew = () => {
         </div>
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
-            <Label>Category</Label>
-            <Dropdown>
+            <Label>Toggle</Label>
+            <Toggle on={watchHot === true} onClick={() => setValue("hot", !watchHot)}></Toggle>
+            {/* <Dropdown>
               <Dropdown.Option>Knowledge</Dropdown.Option>
               <Dropdown.Option>Blockchain</Dropdown.Option>
               <Dropdown.Option>Setup</Dropdown.Option>
               <Dropdown.Option>Nature</Dropdown.Option>
               <Dropdown.Option>Developer</Dropdown.Option>
-            </Dropdown>
+            </Dropdown> */}
           </Field>
           <Field></Field>
         </div>
