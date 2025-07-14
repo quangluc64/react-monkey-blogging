@@ -4,7 +4,7 @@ import { Dropdown } from "components/dropdown";
 import { Field } from "components/field";
 import { Input } from "components/input";
 import { Label } from "components/label";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import slugify from "react-slugify";
 import styled from "styled-components";
@@ -12,6 +12,8 @@ import { postStatus } from "utils/constants";
 import { ImageUpload } from "components/image";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import { Toggle } from "components/toggle";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "firebase-app/firebase-config";
 const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
   const { control, watch, handleSubmit, setValue } = useForm({
@@ -35,6 +37,29 @@ const PostAddNew = () => {
     // values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
   };
+  useEffect(() => {
+    // Hàm lấy dữ liệu từ Firestore
+    const getData = async () => {
+      const colRef = collection(db, "categories");
+      // Tạo tham chiếu đến collection "categories"
+      const q = query(colRef, where("status", "==", 1));
+      // Tạo truy vấn: chỉ lấy những document có status === 1
+      const querySnapshot = await getDocs(q);
+      // Thực thi truy vấn và lấy dữ liệu
+      let result = [];
+      querySnapshot.forEach((doc) => {
+        result.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+        // Duyệt qua từng document trong kết quả và log ra console
+        console.log(result);
+      });
+    };
+    // Gọi hàm khi component được render lần đầu
+    getData();
+  }, []);
+
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -57,6 +82,7 @@ const PostAddNew = () => {
             ></Input>
           </Field>
         </div>
+
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Image</Label>
@@ -65,6 +91,19 @@ const PostAddNew = () => {
               image={previewImage}
               onDelete={handleDeleteImage}
             ></ImageUpload>
+          </Field>
+          <Field>
+            <Label>Category</Label>
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-10 mb-10">
+          <Field>
+            <Label>Feature post</Label>
+            <Toggle
+              on={watchHot === true}
+              onClick={() => setValue("hot", !watchHot)}
+            ></Toggle>
           </Field>
           <Field>
             <Label>Status</Label>
@@ -95,20 +134,6 @@ const PostAddNew = () => {
               </Radio>
             </div>
           </Field>
-        </div>
-        <div className="grid grid-cols-2 gap-x-10 mb-10">
-          <Field>
-            <Label>Toggle</Label>
-            <Toggle on={watchHot === true} onClick={() => setValue("hot", !watchHot)}></Toggle>
-            {/* <Dropdown>
-              <Dropdown.Option>Knowledge</Dropdown.Option>
-              <Dropdown.Option>Blockchain</Dropdown.Option>
-              <Dropdown.Option>Setup</Dropdown.Option>
-              <Dropdown.Option>Nature</Dropdown.Option>
-              <Dropdown.Option>Developer</Dropdown.Option>
-            </Dropdown> */}
-          </Field>
-          <Field></Field>
         </div>
         <Button type="submit" className="mx-auto">
           Add new post
