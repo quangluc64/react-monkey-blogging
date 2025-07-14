@@ -48,6 +48,10 @@ const PostAddNew = () => {
       console.log("error : ", err);
     }
   };
+  const handleDeleteImage = () => {
+    setImage(""); // ảnh gốc
+    setPreviewImage(""); // ảnh preview
+  };
   const addPostHandler = async (values) => {
     values.slug = slugify(values.slug || values.title);
     const uploaded = await handleUploadImage();
@@ -80,7 +84,11 @@ const PostAddNew = () => {
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Image</Label>
-            <ImageUpload onChange={onSelectImage} image={previewImage}></ImageUpload>
+            <ImageUpload
+              onChange={onSelectImage}
+              image={previewImage}
+              onDelete={handleDeleteImage}
+            ></ImageUpload>
           </Field>
           <Field>
             <Label>Status</Label>
