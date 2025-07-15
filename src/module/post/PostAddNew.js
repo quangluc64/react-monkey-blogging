@@ -24,7 +24,7 @@ const PostAddNew = () => {
       status: 2,
       image: "",
       hot: false,
-      category: "",
+      categoryId: "",
     },
   });
   const watchStatus = watch("status");
@@ -37,6 +37,7 @@ const PostAddNew = () => {
     // values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
   };
+  const [category, setCategory] = useState([]);
   useEffect(() => {
     // Hàm lấy dữ liệu từ Firestore
     const getData = async () => {
@@ -53,7 +54,8 @@ const PostAddNew = () => {
           ...doc.data(),
         });
         // Duyệt qua từng document trong kết quả và log ra console
-        console.log(result);
+        setCategory(result);
+        // console.log(result);
       });
     };
     // Gọi hàm khi component được render lần đầu
@@ -94,6 +96,20 @@ const PostAddNew = () => {
           </Field>
           <Field>
             <Label>Category</Label>
+            <Dropdown>
+              <Dropdown.Select placeholder="Select the category"></Dropdown.Select>
+              <Dropdown.List>
+                {category.length > 0 &&
+                  category.map((item) => (
+                    <Dropdown.Option
+                      key={item.id}
+                      onClick={() => setValue("categoryId", item.id)}
+                    >
+                      {item.name}
+                    </Dropdown.Option>
+                  ))}
+              </Dropdown.List>
+            </Dropdown>
           </Field>
         </div>
 
