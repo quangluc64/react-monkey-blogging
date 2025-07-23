@@ -16,10 +16,12 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import { useAuth } from "contexts/auth-context";
 import { toast } from "react-toastify";
-const PostAddNewStyles = styled.div``;
+const PostAddNewStyles = styled.div`
+  font-family: "Montserrat", sans-serif;
+`;
 const PostAddNew = () => {
-  const {userInfo} = useAuth();
-  const { control, watch, handleSubmit, setValue } = useForm({
+  const { userInfo } = useAuth();
+  const { control, watch, handleSubmit, setValue, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -37,17 +39,28 @@ const PostAddNew = () => {
   const addPostHandler = async (values) => {
     toast.info("Uploading... Please wait");
     values.slug = slugify(values.slug || values.title);
-    const uploaded = await handleUploadImage();
-    values.image = uploaded.url;
+    // const uploaded = await handleUploadImage();
+    // values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
     const colRef = collection(db, "posts");
     await addDoc(colRef, {
       ...values,
       userId: userInfo.uid,
     });
-    toast.success("Create new post successfully !")
+    toast.success("Create new post successfully !");
+    reset({
+      title: "",
+      slug: "",
+      status: 2,
+      image: "",
+      hot: false,
+      categoryId: "",
+    });
+    setSelectCategory({});
+    handleDeleteImage();
   };
   const [category, setCategory] = useState([]);
+  const [selectCategory, setSelectCategory] = useState("");
   useEffect(() => {
     // Hàm lấy dữ liệu từ Firestore
     const getData = async () => {
@@ -72,6 +85,10 @@ const PostAddNew = () => {
     getData();
   }, []);
 
+  const handleClickOption = (item) => {
+    setValue("categoryId", item.id);
+    setSelectCategory(item);
+  };
   return (
     <PostAddNewStyles>
       <h1 className="dashboard-heading">Add new post</h1>
@@ -107,13 +124,13 @@ const PostAddNew = () => {
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select the category"></Dropdown.Select>
+              <Dropdown.Select placeholder={selectCategory?.name || "Select the category"}></Dropdown.Select>
               <Dropdown.List>
                 {category.length > 0 &&
                   category.map((item) => (
                     <Dropdown.Option
                       key={item.id}
-                      onClick={() => setValue("categoryId", item.id)}
+                      onClick={() => handleClickOption(item)}
                     >
                       {item.name}
                     </Dropdown.Option>
