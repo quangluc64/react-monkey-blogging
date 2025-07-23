@@ -12,10 +12,13 @@ import { postStatus } from "utils/constants";
 import { ImageUpload } from "components/image";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import { Toggle } from "components/toggle";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
+import { useAuth } from "contexts/auth-context";
+import { toast } from "react-toastify";
 const PostAddNewStyles = styled.div``;
 const PostAddNew = () => {
+  const {userInfo} = useAuth();
   const { control, watch, handleSubmit, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -32,10 +35,17 @@ const PostAddNew = () => {
   const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
     useCloudinaryImage();
   const addPostHandler = async (values) => {
+    toast.info("Uploading... Please wait");
     values.slug = slugify(values.slug || values.title);
-    // const uploaded = await handleUploadImage();
-    // values.image = uploaded.url;
+    const uploaded = await handleUploadImage();
+    values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
+    const colRef = collection(db, "posts");
+    await addDoc(colRef, {
+      ...values,
+      userId: userInfo.uid,
+    });
+    toast.success("Create new post successfully !")
   };
   const [category, setCategory] = useState([]);
   useEffect(() => {
