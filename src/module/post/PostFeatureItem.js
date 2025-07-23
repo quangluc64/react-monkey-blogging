@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import homeFeatureItemImg from "assets/images/home-feature-item.jpg";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "firebase-app/firebase-config";
 const PostFeatureItemStyles = styled.div`
   position: relative;
   width: 100%;
@@ -18,13 +20,13 @@ const PostFeatureItemStyles = styled.div`
     border-radius: 20px;
     /* transform: scale(2); */
   }
-  .post-overlay{
+  .post-overlay {
     position: absolute;
-      inset: 0;
-      border-radius: 16px;
-      background-color: rgba(0, 0, 0, 0.75);
-      mix-blend-mode: multiply;
-      opacity: 0.6;
+    inset: 0;
+    border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.75);
+    mix-blend-mode: multiply;
+    opacity: 0.6;
   }
   .post-content {
     position: absolute;
@@ -39,21 +41,31 @@ const PostFeatureItemStyles = styled.div`
   .post-title {
     margin-top: 20px;
   }
-  .post-info{
+  .post-info {
     color: inherit;
   }
 `;
-const PostFeatureItem = () => {
+const PostFeatureItem = ({ data }) => {
+  const [category, setCategory] = useState();
+  useEffect(() => {
+    async function fetch() {
+      const docRef = doc(db, "categories", data.categoryId);
+      const docSnap = await getDoc(docRef);
+      setCategory(docSnap.data());
+    }
+    fetch();
+  }, [data.categoryId]);
+  if (!data || !data.id) return null;
   return (
     <PostFeatureItemStyles>
-      <PostImage url={homeFeatureItemImg}></PostImage>
+      <PostImage url={data.image}></PostImage>
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
-          <PostCategory>Kiến thức</PostCategory>
+          {category?.name && <PostCategory>{category.name}</PostCategory>}
           <PostMeta></PostMeta>
         </div>
-        <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
+        <PostTitle size="large">{data.title}</PostTitle>
       </div>
     </PostFeatureItemStyles>
   );

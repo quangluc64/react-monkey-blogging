@@ -39,8 +39,9 @@ const PostAddNew = () => {
   const addPostHandler = async (values) => {
     toast.info("Uploading... Please wait");
     values.slug = slugify(values.slug || values.title);
-    // const uploaded = await handleUploadImage();
-    // values.image = uploaded.url;
+    values.status = Number(values.status);
+    const uploaded = await handleUploadImage();
+    values.image = uploaded.url;
     console.log("Dữ liệu gửi đi:", values);
     const colRef = collection(db, "posts");
     await addDoc(colRef, {

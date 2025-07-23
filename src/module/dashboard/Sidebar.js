@@ -140,7 +140,13 @@ const Sidebar = () => {
   return (
     <SidebarStyles className="sidebar">
       <div className="sidebar-logo">
-        <img srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`} alt="" />
+        <NavLink to="/">
+          <img
+            srcSet={`${process.env.PUBLIC_URL}/logo.png 2x`}
+            alt="monkey"
+            className="logo"
+          />
+        </NavLink>
         <span>Monkey Blogging</span>
       </div>
       {sidebarLinks.map((link) => (
