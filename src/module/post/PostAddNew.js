@@ -12,7 +12,7 @@ import { postStatus } from "utils/constants";
 import { ImageUpload } from "components/image";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import { Toggle } from "components/toggle";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import { useAuth } from "contexts/auth-context";
 import { toast } from "react-toastify";
@@ -47,6 +47,7 @@ const PostAddNew = () => {
     await addDoc(colRef, {
       ...values,
       userId: userInfo.uid,
+      createdAt: serverTimestamp
     });
     toast.success("Create new post successfully !");
     reset({
