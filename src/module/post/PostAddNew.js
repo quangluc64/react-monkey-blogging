@@ -12,7 +12,14 @@ import { postStatus } from "utils/constants";
 import { ImageUpload } from "components/image";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import { Toggle } from "components/toggle";
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import { useAuth } from "contexts/auth-context";
 import { toast } from "react-toastify";
@@ -36,33 +43,41 @@ const PostAddNew = () => {
   const watchHot = watch("hot");
   const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
     useCloudinaryImage();
-  const addPostHandler = async (values) => {
-    toast.info("Uploading... Please wait");
-    values.slug = slugify(values.slug || values.title);
-    values.status = Number(values.status);
-    const uploaded = await handleUploadImage();
-    values.image = uploaded.url;
-    console.log("Dữ liệu gửi đi:", values);
-    const colRef = collection(db, "posts");
-    await addDoc(colRef, {
-      ...values,
-      userId: userInfo.uid,
-      createdAt: serverTimestamp
-    });
-    toast.success("Create new post successfully !");
-    reset({
-      title: "",
-      slug: "",
-      status: 2,
-      image: "",
-      hot: false,
-      categoryId: "",
-    });
-    setSelectCategory({});
-    handleDeleteImage();
-  };
   const [category, setCategory] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const addPostHandler = async (values) => {
+    setLoading(true);
+    toast.info("Uploading... Please wait");
+    try {
+      values.slug = slugify(values.slug || values.title);
+      values.status = Number(values.status);
+      const uploaded = await handleUploadImage();
+      values.image = uploaded.url;
+      console.log("Dữ liệu gửi đi:", values);
+      const colRef = collection(db, "posts");
+      await addDoc(colRef, {
+        ...values,
+        userId: userInfo.uid,
+        createdAt: serverTimestamp(),
+      });
+      toast.success("Create new post successfully !");
+      reset({
+        title: "",
+        slug: "",
+        status: 2,
+        image: "",
+        hot: false,
+        categoryId: "",
+      });
+      setSelectCategory({});
+      handleDeleteImage();
+    } catch (error) {
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     // Hàm lấy dữ liệu từ Firestore
     const getData = async () => {
@@ -126,7 +141,9 @@ const PostAddNew = () => {
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Dropdown.Select placeholder={selectCategory?.name || "Select the category"}></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={selectCategory?.name || "Select the category"}
+              ></Dropdown.Select>
               <Dropdown.List>
                 {category.length > 0 &&
                   category.map((item) => (
@@ -180,7 +197,7 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <Button type="submit" className="mx-auto">
+        <Button type="submit" className="mx-auto w-[185px]" isLoading={loading}>
           Add new post
         </Button>
       </form>
