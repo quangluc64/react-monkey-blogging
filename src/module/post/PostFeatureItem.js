@@ -47,7 +47,7 @@ const PostFeatureItemStyles = styled.div`
   }
 `;
 const PostFeatureItem = ({ data }) => {
-  // console.log("data ~", data);
+  console.log("data ~", data);
   const [category, setCategory] = useState();
   const [user, setUser] = useState("");
   useEffect(() => {
@@ -67,6 +67,9 @@ const PostFeatureItem = ({ data }) => {
     fetchUser();
   }, [data.userId]);
   if (!data || !data.id) return null;
+  const date = new Date(data.createdAt?.seconds * 1000);
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
+  console.log("formatDate ~", formatDate);
   return (
     <PostFeatureItemStyles>
       <PostImage url={data.image}></PostImage>
@@ -79,6 +82,7 @@ const PostFeatureItem = ({ data }) => {
           <PostMeta
             to={slugify(user?.fullname)}
             author={user?.fullname}
+            date={formatDate}
           ></PostMeta>
         </div>
         <PostTitle to={data.slug} size="large">

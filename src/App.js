@@ -9,6 +9,7 @@ import DashboardLayout from "module/dashboard/DashboardLayout";
 import DashboardPage from "pages/DashboardPage";
 import PostManage from "module/post/PostManage";
 import PostAddNew from "module/post/PostAddNew";
+import CategoryAddNew from "module/category/CategoryAddNew";
 function App() {
   return (
     <div className="h-[4000px]">
@@ -35,6 +36,10 @@ function App() {
             <Route
               path="/manage/add-post"
               element={<PostAddNew></PostAddNew>}
+            ></Route>
+            <Route
+              path="/manage/add-category"
+              element={<CategoryAddNew></CategoryAddNew>}
             ></Route>
           </Route>
         </Routes>
