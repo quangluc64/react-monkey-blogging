@@ -3,9 +3,10 @@ import { Button } from "components/button";
 import LabelStatus from "components/label/LabelStatus";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
 const CategoryMange = () => {
@@ -26,7 +27,29 @@ const CategoryMange = () => {
       setCategoryList(results);
     });
   }, []);
-  console.log("categoryList ~", categoryList);
+  // console.log("categoryList ~", categoryList);
+  const handleDeleteCategory = async (docId) => {
+    // console.log("docId ~", docId);
+    const colRef = doc(db, "categories", docId);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef); // Delete Category
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -46,7 +69,7 @@ const CategoryMange = () => {
         </thead>
         <tbody>
           {categoryList.map((category) => (
-            <tr>
+            <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.name}</td>
               <td>
@@ -64,7 +87,9 @@ const CategoryMange = () => {
                 <div className="flex items-center gap-x-3">
                   <ActionView></ActionView>
                   <ActionEdit></ActionEdit>
-                  <ActionDelete></ActionDelete>
+                  <ActionDelete
+                    onClick={() => handleDeleteCategory(category.id)}
+                  ></ActionDelete>
                 </div>
               </td>
             </tr>
