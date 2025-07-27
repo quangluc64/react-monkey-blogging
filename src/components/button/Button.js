@@ -31,6 +31,12 @@ const ButtonStyles = styled.button`
       color: ${(props) => props.theme.primary};
       background-color: #fff;
     `};
+  ${(props) =>
+    props.kind === "ghost" &&
+    css`
+      color: ${(props) => props.theme.primary};
+      background-color: rgba(29, 192, 113, 0.2);
+    `};
   &:disabled {
     pointer-events: none;
     opacity: 0.5;

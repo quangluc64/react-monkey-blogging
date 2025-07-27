@@ -10,6 +10,7 @@ import DashboardPage from "pages/DashboardPage";
 import PostManage from "module/post/PostManage";
 import PostAddNew from "module/post/PostAddNew";
 import CategoryAddNew from "module/category/CategoryAddNew";
+import CategoryMange from "module/category/CategoryMange";
 function App() {
   return (
     <div className="h-[4000px]">
@@ -40,6 +41,10 @@ function App() {
             <Route
               path="/manage/add-category"
               element={<CategoryAddNew></CategoryAddNew>}
+            ></Route>
+            <Route
+              path="/manage/category"
+              element={<CategoryMange></CategoryMange>}
             ></Route>
           </Route>
         </Routes>

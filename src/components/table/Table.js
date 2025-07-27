@@ -8,7 +8,7 @@ const TableStyles = styled.div`
     width: 100%;
   }
   thead {
-    background-color: #f7f7f8;
+    background-color: #eee;
   }
   th,
   td {

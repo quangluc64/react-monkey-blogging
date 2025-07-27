@@ -1,5 +1,6 @@
 import { Button } from "components/button";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const DashboardHeaderStyles = styled.div`
   background-color: white;
@@ -23,7 +24,7 @@ const DashboardHeaderStyles = styled.div`
 const DashboardHeader = () => {
   return (
     <DashboardHeaderStyles>
-      <Button to="/dashboard" className="header-button" height="52px">
+      <Button to="/manage/add-post" className="header-button" height="52px">
         Write new post
       </Button>
       <div className="header-avatar">
