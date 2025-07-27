@@ -13,7 +13,7 @@ import CategoryAddNew from "module/category/CategoryAddNew";
 import CategoryMange from "module/category/CategoryMange";
 function App() {
   return (
-    <div className="h-[4000px]">
+    <div>
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
