@@ -6,10 +6,12 @@ import { db } from "firebase-app/firebase-config";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { categoryStatus } from "utils/constants";
 
-const CategoryMange = () => {
+const CategoryManage = () => {
+  const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
   useEffect(() => {
     const colRef = collection(db, "categories");
@@ -86,7 +88,7 @@ const CategoryMange = () => {
               <td>
                 <div className="flex items-center gap-x-3">
                   <ActionView></ActionView>
-                  <ActionEdit></ActionEdit>
+                  <ActionEdit onClick={() => navigate(`/manage/update-category?id=${category.id}`)}></ActionEdit>
                   <ActionDelete
                     onClick={() => handleDeleteCategory(category.id)}
                   ></ActionDelete>
@@ -100,4 +102,4 @@ const CategoryMange = () => {
   );
 };
 
-export default CategoryMange;
+export default CategoryManage;

@@ -10,7 +10,8 @@ import DashboardPage from "pages/DashboardPage";
 import PostManage from "module/post/PostManage";
 import PostAddNew from "module/post/PostAddNew";
 import CategoryAddNew from "module/category/CategoryAddNew";
-import CategoryMange from "module/category/CategoryMange";
+import CategoryUpdate from "module/category/CategoryUpdate";
+import CategoryManage from "module/category/CategoryManage";
 function App() {
   return (
     <div>
@@ -44,7 +45,11 @@ function App() {
             ></Route>
             <Route
               path="/manage/category"
-              element={<CategoryMange></CategoryMange>}
+              element={<CategoryManage></CategoryManage>}
+            ></Route>
+            <Route
+              path="/manage/update-category"
+              element={<CategoryUpdate></CategoryUpdate>}
             ></Route>
           </Route>
         </Routes>
