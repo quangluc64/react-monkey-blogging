@@ -3,7 +3,15 @@ import { Button } from "components/button";
 import LabelStatus from "components/label/LabelStatus";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +21,12 @@ import { categoryStatus } from "utils/constants";
 const CategoryManage = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
+  const [filter, setFilter] = useState("");
   useEffect(() => {
     const colRef = collection(db, "categories");
-    // Hàm lắng nghe thời gian thực Firestore
-    // Khi có thay đổi trong collection categories
-    onSnapshot(colRef, (snapshot) => {
+    const queries = query(colRef, where("name", "==", filter));
+    const newRef = filter === "" ? colRef : queries;
+    onSnapshot(newRef, (snapshot) => {
       let results = [];
       // Snapshot là dữ liệu mới nhất của collection sau khi thay đổi
       snapshot.forEach((doc) => {
@@ -28,8 +37,7 @@ const CategoryManage = () => {
       });
       setCategoryList(results);
     });
-  }, []);
-  // console.log("categoryList ~", categoryList);
+  }, [filter]);
   const handleDeleteCategory = async (docId) => {
     // console.log("docId ~", docId);
     const colRef = doc(db, "categories", docId);
@@ -52,6 +60,9 @@ const CategoryManage = () => {
       }
     });
   };
+  const handleInputFilter = debounce((e) => {
+    setFilter(e.target.value);
+  }, 1000);
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
@@ -59,6 +70,14 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
+      <div className="flex justify-end mb-10">
+        <input
+          type="text"
+          placeholder="Search category..."
+          className="px-5 py-4 border border-gray-300 rounded-lg"
+          onChange={handleInputFilter}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
@@ -88,7 +107,11 @@ const CategoryManage = () => {
               <td>
                 <div className="flex items-center gap-x-3">
                   <ActionView></ActionView>
-                  <ActionEdit onClick={() => navigate(`/manage/update-category?id=${category.id}`)}></ActionEdit>
+                  <ActionEdit
+                    onClick={() =>
+                      navigate(`/manage/update-category?id=${category.id}`)
+                    }
+                  ></ActionEdit>
                   <ActionDelete
                     onClick={() => handleDeleteCategory(category.id)}
                   ></ActionDelete>
