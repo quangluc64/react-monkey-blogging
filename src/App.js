@@ -12,6 +12,7 @@ import PostAddNew from "module/post/PostAddNew";
 import CategoryAddNew from "module/category/CategoryAddNew";
 import CategoryUpdate from "module/category/CategoryUpdate";
 import CategoryManage from "module/category/CategoryManage";
+import UserManage from "module/user/UserManage";
 function App() {
   return (
     <div>
@@ -50,6 +51,10 @@ function App() {
             <Route
               path="/manage/update-category"
               element={<CategoryUpdate></CategoryUpdate>}
+            ></Route>
+            <Route
+              path="/manage/user"
+              element={<UserManage></UserManage>}
             ></Route>
           </Route>
         </Routes>
