@@ -1,9 +1,11 @@
 import { ActionDelete, ActionEdit } from "components/action";
+import LabelStatus from "components/label/LabelStatus";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
 import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userRole, userStatus } from "utils/constants";
 
 const UserTable = () => {
   const navigate = useNavigate();
@@ -24,6 +26,30 @@ const UserTable = () => {
     };
     fetchData();
   }, []);
+  const renderLabelStatus = (status) => {
+    switch (status) {
+      case userStatus.ACTIVE:
+        return <LabelStatus type="success">Active</LabelStatus>;
+      case userStatus.PENDING:
+        return <LabelStatus type="warning">Pending</LabelStatus>;
+      case userStatus.REJECT:
+        return <LabelStatus type="danger">Rejected</LabelStatus>;
+      default:
+        break;
+    }
+  };
+  const renderRoleLabel = (role) => {
+    switch (role) {
+      case userRole.ADMIN:
+        return "Admin";
+      case userRole.MOD:
+        return "Admin";
+      case userRole.USER:
+        return "User";
+      default:
+        break;
+    }
+  };
   const renderUserItem = (user) => {
     return (
       <tr key={user.id}>
@@ -31,22 +57,24 @@ const UserTable = () => {
         <td>
           <div className="flex items-center gap-x-2">
             <img
-              src="https://res.cloudinary.com/dqpdddmjn/image/upload/v1753276599/monkey-blogging/opxvygufoogxvqtmqjpu.jpg"
+              src={user?.avatar}
               alt=""
               className="w-10 h-10 object-cover rounded-lg"
             />
             <div>
               <h3>{user.fullname}</h3>
               <time className="text-sm text-gray-400">
-                {new Date().toLocaleDateString()}
+                {new Date(user?.createdAt?.seconds * 1000).toLocaleDateString(
+                  "vi-VI"
+                )}
               </time>
             </div>
           </div>
         </td>
-        <td></td>
+        <td>{user.username}</td>
         <td>{user.email}</td>
-        <td></td>
-        <td></td>
+        <td>{renderLabelStatus(user.status)}</td>
+        <td>{renderRoleLabel(user.role)}</td>
         <td>
           <div className="flex items-center gap-x-3">
             <ActionEdit

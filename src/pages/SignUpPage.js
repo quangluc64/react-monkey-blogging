@@ -11,11 +11,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import Authentication from "./Authentication";
 import InputPasswordToggle from "components/input/InputPasswordToggle";
 import slugify from "react-slugify";
+import { userRole, userStatus } from "utils/constants";
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
   email: yup.string().required("Please enter your email"),
@@ -44,6 +51,8 @@ const SignUpPage = () => {
     );
     await updateProfile(auth.currentUser, {
       displayName: values.fullname, // default fullname = null
+      photoURL:
+        "https://res.cloudinary.com/dqpdddmjn/image/upload/v1753276599/monkey-blogging/opxvygufoogxvqtmqjpu.jpg",
     });
     // const userRef = collection(db, "users");
     // await addDoc(userRef, {
@@ -55,7 +64,12 @@ const SignUpPage = () => {
       fullname: values.fullname,
       email: values.email,
       password: values.password,
-      username: slugify(values.fullname, {lower: true})
+      username: slugify(values.fullname, { lower: true }),
+      status: userStatus.ACTIVE,
+      role: userRole.USER,
+      createdAt: serverTimestamp(),
+      avatar:
+        "https://res.cloudinary.com/dqpdddmjn/image/upload/v1753276599/monkey-blogging/opxvygufoogxvqtmqjpu.jpg",
     });
     toast.success("Register successfully!");
     navigate("/");

@@ -127,9 +127,25 @@ const Header = () => {
             </span>
           </div>
           {!userInfo ? (
-            <NavLink to="/sign-up">
+            <Button
+              to="/sign-in"
+              type="button"
+              className="header-button"
+              height="56px"
+              style={{
+                maxWidth: "200px",
+              }}
+            >
+              SignUp
+            </Button>
+          ) : (
+            // <div className="header-auth">
+            //   <span>Welcome back, </span>
+            //   <strong className="text-primary">{userInfo.displayName || "User"}</strong>
+            // </div>
+            <div className="header-auth">
               <Button
-                to="/sign-in"
+                to="/dashboard"
                 type="button"
                 className="header-button"
                 height="56px"
@@ -137,13 +153,8 @@ const Header = () => {
                   maxWidth: "200px",
                 }}
               >
-                SignUp
+                Dashboard
               </Button>
-            </NavLink>
-          ) : (
-            <div className="header-auth">
-              <span>Welcome back, </span>
-              <strong className="text-primary">{userInfo.displayName || "User"}</strong>
             </div>
           )}
         </div>
