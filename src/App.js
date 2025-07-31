@@ -13,6 +13,7 @@ import CategoryAddNew from "module/category/CategoryAddNew";
 import CategoryUpdate from "module/category/CategoryUpdate";
 import CategoryManage from "module/category/CategoryManage";
 import UserManage from "module/user/UserManage";
+import UserAddNew from "module/user/UserAddNew";
 function App() {
   return (
     <div>
@@ -55,6 +56,10 @@ function App() {
             <Route
               path="/manage/user"
               element={<UserManage></UserManage>}
+            ></Route>
+            <Route
+              path="/manage/add-user"
+              element={<UserAddNew></UserAddNew>}
             ></Route>
           </Route>
         </Routes>

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-
+import PropTypes from "prop-types";
 const ImageUpload = (props) => {
   const {
     name = "",
@@ -13,7 +13,7 @@ const ImageUpload = (props) => {
   const inputId = "image-upload"; // id cố định hoặc random
 
   return (
-    <div className="relative w-full min-h-[200px] bg-slate-200 rounded-xl flex items-center justify-center overflow-hidden">
+    <div className={`relative w-full min-h-[200px] bg-slate-200 rounded-xl flex items-center justify-center overflow-hidden ${className}`}>
       <input
         id={inputId}
         type="file"
@@ -67,6 +67,11 @@ const ImageUpload = (props) => {
       )}
     </div>
   );
+};
+ImageUpload.propTypes = {
+  name: PropTypes.string,
+  className: PropTypes.string,
+  image: PropTypes.string,
 };
 
 export default ImageUpload;
