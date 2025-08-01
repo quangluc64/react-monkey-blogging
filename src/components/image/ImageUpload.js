@@ -7,13 +7,16 @@ const ImageUpload = (props) => {
     onChange = () => {},
     image = "",
     onDelete = () => {},
+    deleteButtonPosition = "top-right",
     ...rest
   } = props;
 
   const inputId = "image-upload"; // id cố định hoặc random
 
   return (
-    <div className={`relative w-full min-h-[200px] bg-slate-200 rounded-xl flex items-center justify-center overflow-hidden ${className}`}>
+    <div
+      className={`relative w-full min-h-[200px] bg-slate-200 rounded-xl flex items-center justify-center overflow-hidden ${className}`}
+    >
       <input
         id={inputId}
         type="file"
@@ -37,7 +40,11 @@ const ImageUpload = (props) => {
           <button
             type="button"
             onClick={onDelete}
-            className="absolute top-2 right-2 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-white text-sky-600 shadow"
+            className={`${
+              deleteButtonPosition === "center"
+                ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                : "top-2 right-2"
+            } absolute z-10 flex items-center justify-center w-8 h-8 rounded-full bg-white/50 text-sky-600 shadow`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
