@@ -2,9 +2,12 @@ import { ActionDelete, ActionEdit } from "components/action";
 import LabelStatus from "components/label/LabelStatus";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { deleteUser } from "firebase/auth";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { userRole, userStatus } from "utils/constants";
 
 const UserTable = () => {
@@ -13,8 +16,8 @@ const UserTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       const colRef = collection(db, "users");
-      let results = [];
       onSnapshot(colRef, (snapshot) => {
+        let results = [];
         snapshot.forEach((doc) => {
           results.push({
             id: doc.id,
@@ -59,7 +62,7 @@ const UserTable = () => {
             <img
               src={user?.avatar}
               alt=""
-              className="w-10 h-10 object-cover rounded-lg"
+              className="w-10 h-10 object-cover rounded-lg flex-shrink-0"
             />
             <div>
               <h3>{user.fullname}</h3>
@@ -80,12 +83,35 @@ const UserTable = () => {
             <ActionEdit
               onClick={() => navigate(`/manage/update-user?id=${user.id}`)}
             ></ActionEdit>
-            <ActionDelete></ActionDelete>
+            <ActionDelete onClick={() => handleDeleteUser(user)}></ActionDelete>
           </div>
         </td>
       </tr>
     );
   };
+  const handleDeleteUser = async(user) => {
+    const colRef = doc(db, "users", user.id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(colRef);
+        // await deleteUser(user); // Xoá user khỏi Firebase Auth (hiện tại) 
+        toast.success("Delete user successfully");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  }
   return (
     <Table>
       <thead>
