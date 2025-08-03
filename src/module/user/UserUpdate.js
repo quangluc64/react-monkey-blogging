@@ -8,20 +8,24 @@ import { db } from "firebase-app/firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userRole, userStatus } from "utils/constants";
 
 const UserUpdate = () => {
+  const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
+    useCloudinaryImage();
+  console.log("previewImage ~", previewImage);
   const {
     control,
     watch,
     reset,
     getValues,
+    setValue,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -33,16 +37,36 @@ const UserUpdate = () => {
   const watchRole = watch("role");
   const [params] = useSearchParams();
   const userId = params.get("id");
-  const imageUrl = getValues("avatar");
-  const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
-    useCloudinaryImage();
+  const [imageUrl, setImageUrl] = useState("");
+  const handleRemoveImage = async () => {
+    try {
+      handleDeleteImage(); // 1. Xoá khỏi UI
+      setValue("avatar", ""); // 2. Xoá khỏi form
+      setImageUrl(""); // xoá ảnh hiển thị trên UI
+      const colRef = doc(db, "users", userId);
+      await updateDoc(colRef, {
+        avatar: "", // 3. Xoá trong Firestore
+      });
+    } catch (error) {
+      toast.error("Failed to remove image");
+    }
+  };
   const handleUpdateUser = async (values) => {
     try {
+      values.status = Number(values.status);
+      values.role = Number(values.role);
+      // Kiểm tra nếu có ảnh mới thì mới upload
+      if (previewImage) {
+        const uploaded = await handleUploadImage();
+        if (uploaded?.url) {
+          values.avatar = uploaded.url;
+        }
+      }
       const colRef = doc(db, "users", userId);
       await updateDoc(colRef, {
         ...values,
       });
-      toast.success("Update user information successfully");
+      toast.success("Update user successfully");
     } catch (error) {
       toast.error("Update user failed");
     }
@@ -52,6 +76,7 @@ const UserUpdate = () => {
       const colRef = doc(db, "users", userId);
       const docData = await getDoc(colRef);
       reset(docData.data());
+      setImageUrl(docData.data().avatar || ""); // ✅ Cập nhật ảnh ban đầu
     }
     fetchData();
   }, [userId]);
@@ -65,9 +90,11 @@ const UserUpdate = () => {
       <ImageUpload
         className="mb-10 mx-auto !w-[250px] h-[250px] !rounded-full"
         onChange={onSelectImage}
-        image={imageUrl}
-        onDelete={handleDeleteImage}
-        deleteButtonPosition="center" 
+        image={previewImage || getValues("avatar")}
+        // ✅ Nếu người dùng vừa chọn ảnh mới => hiển thị ảnh mới (previewImage)
+        // ✅ Nếu chưa có ảnh mới => lấy ảnh cũ từ (getValues("avatar")) để hiển thị.
+        onDelete={handleRemoveImage}
+        deleteButtonPosition="center"
       ></ImageUpload>
       <form onSubmit={handleSubmit(handleUpdateUser)}>
         <div className="grid grid-cols-2 gap-x-10">

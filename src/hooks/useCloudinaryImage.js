@@ -27,12 +27,15 @@ const useCloudinaryImage = () => {
     }
   };
   const handleDeleteImage = () => {
-    setImage(""); // ảnh gốc
-    setPreviewImage(""); // ảnh preview
+    setImage("");
+    setPreviewImage("");
   };
-  return{
-    onSelectImage, handleUploadImage, handleDeleteImage, previewImage
-  }
+  return {
+    onSelectImage,
+    handleUploadImage,
+    handleDeleteImage,
+    previewImage,
+  };
 };
 
 export default useCloudinaryImage;
