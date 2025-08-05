@@ -46,40 +46,43 @@ const PostAddNew = () => {
       status: 2,
       image: "",
       hot: false,
+      user: {},
       category: {},
     },
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
-  const { onSelectImage, handleDeleteImage, previewImage } =
+  const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
     useCloudinaryImage();
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState(null);
+  const [currentUserInfo, setCurrentUserInfo] = useState(null);
   useEffect(() => {
     async function fetchUser() {
       if (!userInfo.uid) return;
       const colRef = doc(db, "users", userInfo.uid);
       const docData = await getDoc(colRef);
-      setValue("user", {
+      setCurrentUserInfo({
         id: docData.id,
         ...docData.data(),
       });
     }
     fetchUser();
-  }, [userInfo.uid,setValue]);
-  
+  }, [userInfo.uid]);
+
   const addPostHandler = async (values) => {
     toast.info("Uploading... Please wait");
     try {
       values.slug = slugify(values.slug || values.title);
       values.status = Number(values.status);
-      // const uploaded = await handleUploadImage();
-      // values.image = uploaded.url;
+      const uploaded = await handleUploadImage();
+      values.image = uploaded.url;
+      values.user = currentUserInfo;
       console.log("Dữ liệu gửi đi:", values);
       const colRef = collection(db, "posts");
       await addDoc(colRef, {
         ...values,
-        userId: userInfo.uid,
+        // userId: userInfo.uid,
         createdAt: serverTimestamp(),
       });
       toast.success("Create new post successfully !");
@@ -89,6 +92,7 @@ const PostAddNew = () => {
         status: 2,
         image: "",
         hot: false,
+        user: {},
         category: {},
       });
       setSelectCategory(null);

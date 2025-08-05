@@ -3,7 +3,7 @@ import PostImage from "module/post/PostImage";
 import React from "react";
 import PostCategory from "module/post/PostCategory";
 import PostMeta from "module/post/PostMeta";
-import postDetailMain from "assets/images/post-detail-main.png";
+import postDetailMain from "assets/images/post-detail-main.jfif";
 import postDetailSub from "assets/images/post-detail-sub.jfif";
 import postDetailAuthor from "assets/images/post-detail-author.jpeg";
 import styled from "styled-components";
