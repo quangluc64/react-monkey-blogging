@@ -15,6 +15,8 @@ import { Toggle } from "components/toggle";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -28,7 +30,15 @@ const PostAddNewStyles = styled.div`
 `;
 const PostAddNew = () => {
   const { userInfo } = useAuth();
-  const { control, watch, handleSubmit, setValue, reset } = useForm({
+  // console.log("userInfo ~", userInfo.uid);
+  const {
+    control,
+    watch,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { isSubmitting },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -36,24 +46,35 @@ const PostAddNew = () => {
       status: 2,
       image: "",
       hot: false,
-      categoryId: "",
+      category: {},
     },
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
-  const { onSelectImage, handleUploadImage, handleDeleteImage, previewImage } =
+  const { onSelectImage, handleDeleteImage, previewImage } =
     useCloudinaryImage();
-  const [category, setCategory] = useState([]);
-  const [selectCategory, setSelectCategory] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectCategory, setSelectCategory] = useState(null);
+  useEffect(() => {
+    async function fetchUser() {
+      if (!userInfo.uid) return;
+      const colRef = doc(db, "users", userInfo.uid);
+      const docData = await getDoc(colRef);
+      setValue("user", {
+        id: docData.id,
+        ...docData.data(),
+      });
+    }
+    fetchUser();
+  }, [userInfo.uid,setValue]);
+  
   const addPostHandler = async (values) => {
-    setLoading(true);
     toast.info("Uploading... Please wait");
     try {
       values.slug = slugify(values.slug || values.title);
       values.status = Number(values.status);
-      const uploaded = await handleUploadImage();
-      values.image = uploaded.url;
+      // const uploaded = await handleUploadImage();
+      // values.image = uploaded.url;
       console.log("Dữ liệu gửi đi:", values);
       const colRef = collection(db, "posts");
       await addDoc(colRef, {
@@ -68,18 +89,16 @@ const PostAddNew = () => {
         status: 2,
         image: "",
         hot: false,
-        categoryId: "",
+        category: {},
       });
-      setSelectCategory({});
+      setSelectCategory(null);
       handleDeleteImage();
     } catch (error) {
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      console.log(error.message);
     }
   };
+  // Lấy danh sách (category) từ Firebase
   useEffect(() => {
-    // Hàm lấy dữ liệu từ Firestore
     const getData = async () => {
       const colRef = collection(db, "categories");
       // Tạo tham chiếu đến collection "categories"
@@ -94,16 +113,22 @@ const PostAddNew = () => {
           ...doc.data(),
         });
         // Duyệt qua từng document trong kết quả và log ra console
-        setCategory(result);
         // console.log(result);
       });
+      setCategories(result);
     };
     // Gọi hàm khi component được render lần đầu
     getData();
   }, []);
 
-  const handleClickOption = (item) => {
-    setValue("categoryId", item.id);
+  const handleClickOption = async (item) => {
+    // setValue("categoryId", item.id);
+    const colRef = doc(db, "categories", item.id);
+    const docData = await getDoc(colRef);
+    setValue("category", {
+      id: docData.id,
+      ...docData.data(),
+    });
     setSelectCategory(item);
   };
   return (
@@ -145,8 +170,8 @@ const PostAddNew = () => {
                 placeholder={selectCategory?.name || "Select the category"}
               ></Dropdown.Select>
               <Dropdown.List>
-                {category.length > 0 &&
-                  category.map((item) => (
+                {categories.length > 0 &&
+                  categories.map((item) => (
                     <Dropdown.Option
                       key={item.id}
                       onClick={() => handleClickOption(item)}
@@ -197,7 +222,12 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <Button type="submit" className="mx-auto w-[185px]" isLoading={loading}>
+        <Button
+          type="submit"
+          className="mx-auto w-[185px]"
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+        >
           Add new post
         </Button>
       </form>

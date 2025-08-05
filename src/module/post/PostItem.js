@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import postListItemImg from "assets/images/post-list-item.jpg";
+import postListItemImg from "assets/images/post-list-item.png";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";

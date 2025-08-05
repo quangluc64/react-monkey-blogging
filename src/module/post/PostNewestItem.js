@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import homeNewestItemImg from "assets/images/home-newest-item.jpg";
+import homeNewestItemImg from "assets/images/home-newest-item.jfif";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";

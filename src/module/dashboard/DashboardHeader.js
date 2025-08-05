@@ -29,7 +29,7 @@ const DashboardHeader = () => {
       </Button>
       <div className="header-avatar">
         <img
-          src="https://res.cloudinary.com/dqpdddmjn/image/upload/v1753259290/monkey-blogging/puuay9azyk6hve9g6fk0.jpg"
+          src="https://res.cloudinary.com/dqpdddmjn/image/upload/v1754211996/monkey-blogging/ohzpic1dttinqhfrzb8r.jpg"
           alt=""
         />
       </div>

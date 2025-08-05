@@ -69,7 +69,7 @@ const SignUpPage = () => {
       role: userRole.USER,
       createdAt: serverTimestamp(),
       avatar:
-        "https://res.cloudinary.com/dqpdddmjn/image/upload/v1753276599/monkey-blogging/opxvygufoogxvqtmqjpu.jpg",
+        "https://res.cloudinary.com/dqpdddmjn/image/upload/v1754297378/monkey-blogging/y1g56yi4pcqa8ngtrl7z.jpg",
     });
     toast.success("Register successfully!");
     navigate("/");
