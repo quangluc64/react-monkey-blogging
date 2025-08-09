@@ -1,10 +1,13 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
+import LabelStatus from "components/label/LabelStatus";
 import { Pagination } from "components/pagination";
 import { Table } from "components/table";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   limit,
   onSnapshot,
@@ -16,6 +19,9 @@ import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { postStatus } from "utils/constants";
 const POST_PER_PAGE = 1;
 const PostManage = () => {
   const navigate = useNavigate();
@@ -28,7 +34,7 @@ const PostManage = () => {
       const colRef = collection(db, "posts");
       const newRef = filter
         ? query(
-            colRef, 
+            colRef,
             where("title", ">=", filter),
             where("title", "<=", filter + "utf8")
           )
@@ -78,7 +84,40 @@ const PostManage = () => {
       documentSnapshots.docs[documentSnapshots.docs.length - 1];
     setLastDoc(lastVisible);
   };
-  
+  const handleDeletePost = async (postId) => {
+    const docRef = doc(db, "posts", postId);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(docRef);
+        toast.success("Delete user successfully");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your post has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
+  const renderLabelStatus = (status) => {
+    switch (status) {
+      case postStatus.APPROVED:
+        return <LabelStatus type="success">Approved</LabelStatus>;
+      case postStatus.PENDING:
+        return <LabelStatus type="warming">Pending</LabelStatus>;
+      case postStatus.PENDING:
+        return <LabelStatus type="danger">Rejected</LabelStatus>;
+      default:
+        break;
+    }
+  };
   return (
     <div>
       <DashboardHeading
@@ -102,6 +141,7 @@ const PostManage = () => {
             <th>Post</th>
             <th>Category</th>
             <th>Author</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -110,19 +150,20 @@ const PostManage = () => {
             return (
               <tr key={post.id}>
                 <td>{post.id.slice(0, 7) + "..."}</td>
-                <td>
+                <td className="min-w-[300px]">
                   <div className="flex items-center gap-x-3">
                     <img
                       src={post.image}
                       alt=""
                       className="w-[66px] h-[55px] rounded object-cover"
                     />
-                    <div className="flex-1">
+                    <div className="">
                       <h3 className="font-semibold">
                         {post.title?.split(" ").slice(0, 2).join(" ") + "..."}
                       </h3>
                       <time className="text-sm text-gray-500">
-                        Date: {new Date(
+                        Date:{" "}
+                        {new Date(
                           post?.createdAt?.seconds * 1000
                         ).toLocaleDateString("vi-VI")}
                       </time>
@@ -135,11 +176,16 @@ const PostManage = () => {
                 <td>
                   <span className="text-gray-500">{post.user.fullname}</span>
                 </td>
+                <td>{renderLabelStatus(post.status)}</td>
                 <td>
                   <div className="flex items-center gap-x-3 text-gray-500">
-                    <ActionView onClick={() => navigate(`/${post.slug}`)}></ActionView>
+                    <ActionView
+                      onClick={() => navigate(`/${post.slug}`)}
+                    ></ActionView>
                     <ActionEdit></ActionEdit>
-                    <ActionDelete></ActionDelete>
+                    <ActionDelete
+                      onClick={() => handleDeletePost(post.id)}
+                    ></ActionDelete>
                   </div>
                 </td>
               </tr>
