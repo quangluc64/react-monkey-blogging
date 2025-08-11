@@ -112,7 +112,7 @@ const PostManage = () => {
         return <LabelStatus type="success">Approved</LabelStatus>;
       case postStatus.PENDING:
         return <LabelStatus type="warming">Pending</LabelStatus>;
-      case postStatus.PENDING:
+      case postStatus.REJECTED:
         return <LabelStatus type="danger">Rejected</LabelStatus>;
       default:
         break;
@@ -182,7 +182,7 @@ const PostManage = () => {
                     <ActionView
                       onClick={() => navigate(`/${post.slug}`)}
                     ></ActionView>
-                    <ActionEdit></ActionEdit>
+                    <ActionEdit onClick={() => navigate(`/manage/update-post?id=${post.id}`)}></ActionEdit>
                     <ActionDelete
                       onClick={() => handleDeletePost(post.id)}
                     ></ActionDelete>
