@@ -1,6 +1,6 @@
 import Layout from "components/layout/Layout";
 import PostImage from "module/post/PostImage";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostCategory from "module/post/PostCategory";
 import PostMeta from "module/post/PostMeta";
 import postDetailMain from "assets/images/post-detail-main.jfif";
@@ -9,6 +9,19 @@ import postDetailAuthor from "assets/images/post-detail-author.jpeg";
 import styled from "styled-components";
 import Heading from "components/layout/Heading";
 import PostItem from "module/post/PostItem";
+import { useParams } from "react-router-dom";
+import NotFoundPage from "./NotFoundPage";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "firebase-app/firebase-config";
+import parse from "html-react-parser";
+import slugify from "react-slugify";
 const PostDetailsPageStyles = styled.div`
   margin-top: 50px;
   font-family: "Montserrat", sans-serif;
@@ -18,31 +31,31 @@ const PostDetailsPageStyles = styled.div`
     justify-content: space-between;
     gap: 67px;
     .post-img {
-    width: 100%;
-    max-width: 640px;
-    height: 470px;
-    border-radius: 20px;
-  }
-  .post-info {
-    max-width: 460px;
-  }
-  .post-category {
-    margin-bottom: 25px;
-  }
-  .post-title {
-    margin-bottom: 20px;
-    font-weight: 600;
-    font-size: 36px;
-    line-height: 48px;
-    color: #23bb86;
-  }
+      width: 100%;
+      max-width: 640px;
+      height: 470px;
+      border-radius: 20px;
+    }
+    .post-info {
+      max-width: 460px;
+    }
+    .post-category {
+      margin-bottom: 25px;
+    }
+    .post-title {
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 48px;
+      color: #23bb86;
+    }
   }
 
   .post-content {
     margin: 50px auto 80px;
     max-width: 800px;
   }
-  .entry-content {
+  /* .entry-content {
     margin-bottom: 70px;
     h2 {
       margin-bottom: 25px;
@@ -75,7 +88,7 @@ const PostDetailsPageStyles = styled.div`
         color: ${(props) => props.theme.gray6B};
       }
     }
-  }
+  } */
   .author {
     display: flex;
     align-items: center;
@@ -110,22 +123,42 @@ const PostDetailsPageStyles = styled.div`
   }
 `;
 const PostDetailsPage = () => {
+  const { slug } = useParams();
+  const [postInfo, setPostInfo] = useState({});
+  const {user} = postInfo;
+  const date = new Date(postInfo.createdAt?.seconds * 1000);
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
+  useEffect(() => {
+    async function fetchData() {
+      const colRef = query(collection(db, "posts"), where("slug", "==", slug));
+      onSnapshot(colRef, (snapshot) => {
+        snapshot.forEach((doc) => {
+          setPostInfo(doc.data());
+        });
+      });
+    }
+    fetchData();
+  }, []);
+  console.log("postInfo ~", postInfo);
+  if (!slug || !postInfo?.title) return <NotFoundPage></NotFoundPage>;
   return (
     <Layout>
       <PostDetailsPageStyles>
         <div className="container">
           <div className="post-header">
-            <PostImage url={postDetailMain}></PostImage>
+            <PostImage url={postInfo.image}></PostImage>
             <div className="post-info">
-              <PostCategory>Kiến thức</PostCategory>
-              <h1 className="post-title">
-                Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-              </h1>
-              <PostMeta></PostMeta>
+              <PostCategory>{postInfo.category?.name}</PostCategory>
+              <h1 className="post-title">{postInfo.title}</h1>
+              <PostMeta
+                to={slugify(user?.fullname)}
+                author={user?.fullname}
+                date={formatDate}
+              ></PostMeta>
             </div>
           </div>
           <div className="post-content">
-            <div className="entry-content">
+            {/* <div className="entry-content">
               <h2>Chương 1</h2>
               <p>
                 Gastronomy atmosphere set aside. Slice butternut cooking home.
@@ -160,7 +193,7 @@ const PostDetailsPage = () => {
                 fall-off-the-bone butternut chuck rice burgers.
               </p>
               <figure>
-                <img src={postDetailSub} alt="" loading="lazy"/>
+                <img src={postDetailSub} alt="" loading="lazy" />
                 <figcaption>
                   Gastronomy atmosphere set aside. Slice butternut cooking home.
                 </figcaption>
@@ -177,13 +210,14 @@ const PostDetailsPage = () => {
                 richness magnificent atmosphere. Sweet soften dinners, cover
                 mustard infused skillet, Skewers on culinary experience.
               </p>
-            </div>
+            </div> */}
+            <div className="entry-content">{parse(postInfo.content || "")}</div>
             <div className="author">
               <div className="author-img">
-                <img src={postDetailAuthor} alt="" loading="lazy"/>
+                <img src={user.avatar} alt="" loading="lazy" />
               </div>
               <div className="author-content">
-                <h3 className="author-name">Nguyễn Ngọc Lan Anh</h3>
+                <h3 className="author-name">{user.fullname}</h3>
                 <p className="author-desc">
                   Gastronomy atmosphere set aside. Slice butternut cooking home.
                   Delicious romantic undisturbed raw platter will meld. Thick

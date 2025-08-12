@@ -1,0 +1,35 @@
+.entry-content,
+.entry-content .ql-snow .ql-editor {
+  margin-bottom: 70px;
+  h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 28px;
+  }
+  p {
+    margin-bottom: 40px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    font-family: Montserrat;
+    letter-spacing: 0.5px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  figure {
+    margin-bottom: 40px;
+    img {
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    figcaption {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center;
+      color: #6b6b6b;
+    }
+  }
+}

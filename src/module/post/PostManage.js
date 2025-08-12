@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { postStatus } from "utils/constants";
-const POST_PER_PAGE = 1;
+const POST_PER_PAGE = 4;
 const PostManage = () => {
   const navigate = useNavigate();
   const [postList, setPostList] = useState([]);

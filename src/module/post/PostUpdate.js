@@ -13,13 +13,18 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useSearchParams } from "react-router-dom";
+import slugify from "react-slugify";
+import { toast } from "react-toastify";
 import { postStatus } from "utils/constants";
 
 const PostUpdate = () => {
@@ -42,10 +47,12 @@ const PostUpdate = () => {
     useCloudinaryImage();
   const watchHot = watch("hot");
   const watchStatus = watch("status");
+  const watchImage = watch("image");
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState(null);
   const [params] = useSearchParams();
   const postId = params.get("id");
+  const [content, setContent] = useState("");
   // Lấy danh sách (category) từ Firebase
   useEffect(() => {
     const getData = async () => {
@@ -87,12 +94,48 @@ const PostUpdate = () => {
       if (!postData) return;
       reset(postData);
       setSelectCategory(postData.category); // Reset category
+      setContent(postData.content || "");
     }
     fetchData();
   }, [postId, reset]);
-  const updatePostHandler = (values) => {
-    console.log("values ~", values);
+  const handleRemoveImage = async () => {
+    try {
+      handleDeleteImage(); // 1. Xoá khỏi UI
+      setValue("image", ""); // 2. Xoá khỏi form
+      const colRef = doc(db, "posts", postId);
+      await updateDoc(colRef, {
+        image: "", // 3. Xoá trong Firestore
+      });
+    } catch (error) {
+      toast.error("Failed to remove image");
+    }
   };
+  const updatePostHandler = async (values) => {
+    try {
+      values.status = Number(values.status);
+      values.slug = slugify(values.slug || values.title);
+      values.content = content;
+      console.log("values ~", values);
+      // Upload ảnh nếu có ảnh mới
+      if (previewImage) {
+        const uploaded = await handleUploadImage();
+        if (!uploaded?.url) {
+          toast.error("Upload image failed");
+          return; // Dừng luôn nếu upload lỗi
+        }
+        values.image = uploaded.url;
+      } else {
+        values.image = watchImage || "";
+      }
+      const docRef = doc(db, "posts", postId);
+      await updateDoc(docRef, { content, ...values });
+      toast.success("Update post successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update post");
+    }
+  };
+
   return (
     <div>
       <DashboardHeading
@@ -100,7 +143,7 @@ const PostUpdate = () => {
         desc="Update post content"
       ></DashboardHeading>
       <form onSubmit={handleSubmit(updatePostHandler)}>
-        <div className="grid grid-cols-2 gap-x-10 mb-10">
+        <div className="grid grid-cols-2 gap-x-10">
           <Field>
             <Label>Title</Label>
             <Input
@@ -119,13 +162,13 @@ const PostUpdate = () => {
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-10 mb-10">
+        <div className="grid grid-cols-2 gap-x-10">
           <Field>
             <Label>Image</Label>
             <ImageUpload
               onChange={onSelectImage}
-              image={previewImage || getValues("image")}
-              onDelete={handleDeleteImage}
+              image={previewImage || watchImage}
+              onDelete={handleRemoveImage}
             ></ImageUpload>
           </Field>
           <Field>
@@ -149,7 +192,20 @@ const PostUpdate = () => {
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-10 mb-10">
+        <div className="mb-10">
+          <Field>
+            <Label>Content</Label>
+            <div className="w-[80%]">
+              <ReactQuill
+                className="entry-content"
+                value={content}
+                onChange={setContent}
+              />
+            </div>
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-10">
           <Field>
             <Label>Feature post</Label>
             <Toggle
@@ -193,7 +249,7 @@ const PostUpdate = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Add new post
+          Update post
         </Button>
       </form>
     </div>

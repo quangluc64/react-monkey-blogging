@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "content";
 *,
 *::before,
 *::after {
@@ -55,24 +56,24 @@ body {
   font-size: 16px;
   color: "#232323";
 }
-.container{
+.container {
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
   // padding: 0px 20px;
 }
-.text-primary{
-  color: #2EBAC1;
+.text-primary {
+  color: #2ebac1;
 }
-.home-block{
+.home-block {
   padding-bottom: 60px;
   font-family: "Montserrat", sans-serif;
 }
-.grid-layout{
+.grid-layout {
   display: grid;
   gap: 50px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  &--primary{
+  &--primary {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -87,6 +88,6 @@ body {
   width: 1px;
   white-space: nowrap;
 }
-.form-layout{
-  @apply grid grid-cols-2 gap-x-10 
+.form-layout {
+  @apply grid grid-cols-2 gap-x-10;
 }
