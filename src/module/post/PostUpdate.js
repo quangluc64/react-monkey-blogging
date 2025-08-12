@@ -18,14 +18,18 @@ import {
 } from "firebase/firestore";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useSearchParams } from "react-router-dom";
 import slugify from "react-slugify";
 import { toast } from "react-toastify";
 import { postStatus } from "utils/constants";
+
+import ReactQuill, { Quill } from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import ImageUploader from "quill-image-uploader";
+import "quill-image-uploader/dist/quill.imageUploader.min.css";
+Quill.register("modules/imageUploader", ImageUploader);
 
 const PostUpdate = () => {
   const {
@@ -135,6 +139,26 @@ const PostUpdate = () => {
       toast.error("Failed to update post");
     }
   };
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote"],
+        [{ header: 1 }, { header: 2 }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["link", "image"],
+      ],
+      imageUploader: {
+        upload: (file) => {
+          return new Promise((resolve, reject) => {
+            resolve("https://source.unsplash.com/FV3GConVSss/900x500");
+          });
+        },
+      },
+    }),
+    []
+  );
 
   return (
     <div>
@@ -198,6 +222,7 @@ const PostUpdate = () => {
             <div className="w-[80%]">
               <ReactQuill
                 className="entry-content"
+                modules={modules}
                 value={content}
                 onChange={setContent}
               />

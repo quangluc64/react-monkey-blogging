@@ -140,7 +140,7 @@ const PostDetailsPage = () => {
     fetchData();
   }, []);
   console.log("postInfo ~", postInfo);
-  if (!slug || !postInfo?.title) return <NotFoundPage></NotFoundPage>;
+  if (!slug || !postInfo?.title) return;
   return (
     <Layout>
       <PostDetailsPageStyles>
