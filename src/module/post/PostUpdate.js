@@ -24,11 +24,12 @@ import { useSearchParams } from "react-router-dom";
 import slugify from "react-slugify";
 import { toast } from "react-toastify";
 import { postStatus } from "utils/constants";
-
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageUploader from "quill-image-uploader";
 import "quill-image-uploader/dist/quill.imageUploader.min.css";
+import { imgbbAPI } from "config/apiConfig";
+import axios from "axios";
 Quill.register("modules/imageUploader", ImageUploader);
 
 const PostUpdate = () => {
@@ -150,10 +151,19 @@ const PostUpdate = () => {
         ["link", "image"],
       ],
       imageUploader: {
-        upload: (file) => {
-          return new Promise((resolve, reject) => {
-            resolve("https://source.unsplash.com/FV3GConVSss/900x500");
+        // imgbbAPI = "https://api.imgbb.com/1/upload?key=d19bb508c66df574bae60f41e1c6d4ec";
+        upload: async (file) => {
+          const bodyFormData = new FormData();
+          bodyFormData.append("image", file);
+          const response = await axios({
+            method: "post",
+            url: imgbbAPI,
+            data: bodyFormData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           });
+          return response.data.data.url;
         },
       },
     }),
