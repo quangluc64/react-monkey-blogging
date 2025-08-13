@@ -4,6 +4,7 @@ import { Field } from "components/field";
 import { ImageUpload } from "components/image";
 import { Input } from "components/input";
 import { Label } from "components/label";
+import Textarea from "components/textarea/Textarea";
 import { db } from "firebase-app/firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import useCloudinaryImage from "hooks/useCloudinaryImage";
@@ -195,6 +196,16 @@ const UserUpdate = () => {
                 User
               </Radio>
             </div>
+          </Field>
+        </div>
+        <div className="mb-10">
+          <Field>
+            <Label>Description</Label>
+            <Textarea
+              name="description"
+              control={control}
+              placeholder="Please enter description"
+            ></Textarea>
           </Field>
         </div>
         <Button

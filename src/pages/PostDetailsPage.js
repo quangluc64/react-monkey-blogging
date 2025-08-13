@@ -22,6 +22,7 @@ import {
 import { db } from "firebase-app/firebase-config";
 import parse from "html-react-parser";
 import slugify from "react-slugify";
+import PostAuthor from "module/post/PostAuthor";
 const PostDetailsPageStyles = styled.div`
   margin-top: 50px;
   font-family: "Montserrat", sans-serif;
@@ -55,77 +56,46 @@ const PostDetailsPageStyles = styled.div`
     margin: 50px auto 80px;
     max-width: 800px;
   }
-  /* .entry-content {
-    margin-bottom: 70px;
-    h2 {
-      margin-bottom: 25px;
-      font-weight: 600;
-      font-size: 22px;
-      line-height: 28px;
-    }
-    p {
-      margin-bottom: 40px;
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 32px;
-      font-family: Montserrat;
-      letter-spacing: 0.5px;
-      &:last-child{
-        margin-bottom: 0px;
-      }
-    }
-    figure {
-      margin-bottom: 40px;
-      img {
-        border-radius: 20px;
-        margin-bottom: 20px;
-      }
-      figcaption {
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
-        text-align: center;
-        color: ${(props) => props.theme.gray6B};
-      }
-    }
-  } */
+
   .author {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-  }
-  .author-img {
-    flex-shrink: 0;
-    width: 240px;
-    height: 240px;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 20px;
+    background-color: ${(props) => props.theme.grayF3};
+    border-radius: 20px;
+    &-img {
+      flex-shrink: 0;
+      width: 240px;
+      height: 240px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+      }
     }
-  }
-  .author-content {
-    padding: 15px;
-  }
-  .author-name {
-    margin-bottom: 15px;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 28px;
-    color: #23bb86;
-  }
-  .author-desc {
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 28px;
+    &-content {
+      padding: 15px;
+    }
+    &-name {
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 28px;
+      color: #23bb86;
+    }
+    &-desc {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 28px;
+    }
   }
 `;
 const PostDetailsPage = () => {
   const { slug } = useParams();
   const [postInfo, setPostInfo] = useState({});
-  const {user} = postInfo;
+  const { user } = postInfo;
   const date = new Date(postInfo.createdAt?.seconds * 1000);
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   useEffect(() => {
@@ -158,74 +128,8 @@ const PostDetailsPage = () => {
             </div>
           </div>
           <div className="post-content">
-            {/* <div className="entry-content">
-              <h2>Chương 1</h2>
-              <p>
-                Gastronomy atmosphere set aside. Slice butternut cooking home.
-                Delicious romantic undisturbed raw platter will meld. Thick
-                Skewers skillet natural, smoker soy sauce wait roux. slices
-                rosette bone-in simmer precision alongside baby leeks. Crafting
-                renders aromatic enjoyment, then slices taco. Minutes
-                undisturbed cuisine lunch magnificent mustard curry. Juicy share
-                baking sheet pork. Meals ramen rarities selection, raw pastries
-                richness magnificent atmosphere. Sweet soften dinners, cover
-                mustard infused skillet, Skewers on culinary experience.
-              </p>
-              <p>
-                Juicy meatballs brisket slammin' baked shoulder. Juicy smoker
-                soy sauce burgers brisket. polenta mustard hunk greens. Wine
-                technique snack skewers chuck excess. Oil heat slowly. slices
-                natural delicious, set aside magic tbsp skillet, bay leaves
-                brown centerpiece. fruit soften edges frond slices onion snack
-                pork steem on wines excess technique cup; Cover smoker soy sauce
-                fruit snack. Sweet one-dozen scrape delicious, non sheet raw
-                crunch mustard. Minutes clever slotted tongs scrape, brown steem
-                undisturbed rice.
-              </p>
-              <p>
-                Food qualities braise chicken cuts bowl through slices butternut
-                snack. Tender meat juicy dinners. One-pot low heat plenty of
-                time adobo fat raw soften fruit. sweet renders bone-in marrow
-                richness kitchen, fricassee basted pork shoulder. Delicious
-                butternut squash hunk. Flavor centerpiece plate, delicious ribs
-                bone-in meat, excess chef end. sweet effortlessly pork, low heat
-                smoker soy sauce flavor meat, rice fruit fruit. Romantic
-                fall-off-the-bone butternut chuck rice burgers.
-              </p>
-              <figure>
-                <img src={postDetailSub} alt="" loading="lazy" />
-                <figcaption>
-                  Gastronomy atmosphere set aside. Slice butternut cooking home.
-                </figcaption>
-              </figure>
-              <h2>Chương 2</h2>
-              <p>
-                Gastronomy atmosphere set aside. Slice butternut cooking home.
-                Delicious romantic undisturbed raw platter will meld. Thick
-                Skewers skillet natural, smoker soy sauce wait roux. slices
-                rosette bone-in simmer precision alongside baby leeks. Crafting
-                renders aromatic enjoyment, then slices taco. Minutes
-                undisturbed cuisine lunch magnificent mustard curry. Juicy share
-                baking sheet pork. Meals ramen rarities selection, raw pastries
-                richness magnificent atmosphere. Sweet soften dinners, cover
-                mustard infused skillet, Skewers on culinary experience.
-              </p>
-            </div> */}
             <div className="entry-content">{parse(postInfo.content || "")}</div>
-            <div className="author">
-              <div className="author-img">
-                <img src={user.avatar} alt="" loading="lazy" />
-              </div>
-              <div className="author-content">
-                <h3 className="author-name">{user.fullname}</h3>
-                <p className="author-desc">
-                  Gastronomy atmosphere set aside. Slice butternut cooking home.
-                  Delicious romantic undisturbed raw platter will meld. Thick
-                  Skewers skillet natural, smoker soy sauce wait roux.
-                  Gastronomy atmosphere set aside. Slice butternut cooking home.{" "}
-                </p>
-              </div>
-            </div>
+            <PostAuthor userId={user.id}></PostAuthor>
           </div>
           <div className="post-related">
             <Heading>Bài viết liên quan</Heading>

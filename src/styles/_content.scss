@@ -36,3 +36,12 @@
     border-radius: 20px;
   }
 }
+.quill{
+  position: relative;
+  .ql-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ccc;
+  }
+}
