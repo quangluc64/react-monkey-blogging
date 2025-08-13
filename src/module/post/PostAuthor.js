@@ -2,7 +2,7 @@ import { db } from "firebase-app/firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 const PostAuthor = ({ userId }) => {
-  console.log("userId ~", userId);
+  // console.log("userId ~", userId);
   const [user, setUser] = useState({});
   useEffect(() => {
     async function fetchData() {

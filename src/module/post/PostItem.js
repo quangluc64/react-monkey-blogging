@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import postListItemImg from "assets/images/post-list-item.png";
+// import postListItemImg from "assets/images/post-list-item.png";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import slugify from "react-slugify";
 const PostItemStyles = styled.div`
   /* max-width: 270px; */
   font-family: "Montserrat", sans-serif;
@@ -23,15 +24,21 @@ const PostItemStyles = styled.div`
     margin-top: 15px;
   }
 `;
-const PostItem = () => {
+const PostItem = ({ data }) => {
+  if(!data) return;
+  console.log("data ~", data);
+  const date = new Date(data.createdAt?.seconds * 1000);
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostItemStyles>
-      <PostImage url={postListItemImg}></PostImage>
-      <PostCategory>Kiến thức</PostCategory>
-      <PostTitle>
-        Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-      </PostTitle>
-      <PostMeta></PostMeta>
+      <PostImage url={data?.image}></PostImage>
+      <PostCategory>{data?.category?.name}</PostCategory>
+      <PostTitle>{data?.title}</PostTitle>
+      <PostMeta
+        to={slugify(data.user?.fullname)}
+        author={data.user?.fullname}
+        date={formatDate}
+      ></PostMeta>
     </PostItemStyles>
   );
 };

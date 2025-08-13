@@ -3,18 +3,13 @@ import PostImage from "module/post/PostImage";
 import React, { useEffect, useState } from "react";
 import PostCategory from "module/post/PostCategory";
 import PostMeta from "module/post/PostMeta";
-import postDetailMain from "assets/images/post-detail-main.jfif";
-import postDetailSub from "assets/images/post-detail-sub.jfif";
-import postDetailAuthor from "assets/images/post-detail-author.jpeg";
+// import postDetailMain from "assets/images/post-detail-main.jfif";
+// import postDetailSub from "assets/images/post-detail-sub.jfif";
+// import postDetailAuthor from "assets/images/post-detail-author.jpeg";
 import styled from "styled-components";
-import Heading from "components/layout/Heading";
-import PostItem from "module/post/PostItem";
 import { useParams } from "react-router-dom";
-import NotFoundPage from "./NotFoundPage";
 import {
   collection,
-  doc,
-  getDoc,
   onSnapshot,
   query,
   where,
@@ -23,6 +18,7 @@ import { db } from "firebase-app/firebase-config";
 import parse from "html-react-parser";
 import slugify from "react-slugify";
 import PostAuthor from "module/post/PostAuthor";
+import PostRelated from "module/post/PostRelated";
 const PostDetailsPageStyles = styled.div`
   margin-top: 50px;
   font-family: "Montserrat", sans-serif;
@@ -95,7 +91,7 @@ const PostDetailsPageStyles = styled.div`
 const PostDetailsPage = () => {
   const { slug } = useParams();
   const [postInfo, setPostInfo] = useState({});
-  const { user } = postInfo;
+  const { user, category } = postInfo;
   const date = new Date(postInfo.createdAt?.seconds * 1000);
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   useEffect(() => {
@@ -108,8 +104,8 @@ const PostDetailsPage = () => {
       });
     }
     fetchData();
-  }, []);
-  console.log("postInfo ~", postInfo);
+  }, [slug]);
+  // console.log("postInfo ~", postInfo);
   if (!slug || !postInfo?.title) return;
   return (
     <Layout>
@@ -131,15 +127,7 @@ const PostDetailsPage = () => {
             <div className="entry-content">{parse(postInfo.content || "")}</div>
             <PostAuthor userId={user.id}></PostAuthor>
           </div>
-          <div className="post-related">
-            <Heading>Bài viết liên quan</Heading>
-            <div className="grid-layout grid-layout--primary">
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-              <PostItem></PostItem>
-            </div>
-          </div>
+          <PostRelated categoryId={category.id}></PostRelated>
         </div>
       </PostDetailsPageStyles>
     </Layout>
