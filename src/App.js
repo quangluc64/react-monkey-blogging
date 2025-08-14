@@ -16,6 +16,8 @@ import UserManage from "module/user/UserManage";
 import UserAddNew from "module/user/UserAddNew";
 import UserUpdate from "module/user/UserUpdate";
 import PostUpdate from "module/post/PostUpdate";
+import CategoryPage from "pages/CategoryPage";
+import AuthorPage from "pages/AuthorPage";
 function App() {
   return (
     <div>
@@ -29,7 +31,14 @@ function App() {
             path="/:slug"
             element={<PostDetailsPage></PostDetailsPage>}
           ></Route>
-
+          <Route
+            path="/category/:slug"
+            element={<CategoryPage></CategoryPage>}
+          ></Route>
+          <Route
+            path="/author/:slug"
+            element={<AuthorPage></AuthorPage>}
+          ></Route>
           <Route element={<DashboardLayout></DashboardLayout>}>
             <Route
               path="/dashboard"

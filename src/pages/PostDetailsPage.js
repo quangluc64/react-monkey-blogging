@@ -19,6 +19,7 @@ import parse from "html-react-parser";
 import slugify from "react-slugify";
 import PostAuthor from "module/post/PostAuthor";
 import PostRelated from "module/post/PostRelated";
+import NotFoundPage from "./NotFoundPage";
 const PostDetailsPageStyles = styled.div`
   margin-top: 50px;
   font-family: "Montserrat", sans-serif;
@@ -105,8 +106,12 @@ const PostDetailsPage = () => {
     }
     fetchData();
   }, [slug]);
-  // console.log("postInfo ~", postInfo);
-  if (!slug || !postInfo?.title) return;
+  useEffect(() => {
+    // window.scroll(0, 0)
+    document.body.scrollIntoView({behavior: "smooth", block: "start"})
+  },[slug])
+  if (!slug) return <NotFoundPage></NotFoundPage>;
+  if(!postInfo?.title) return;
   return (
     <Layout>
       <PostDetailsPageStyles>
@@ -114,10 +119,10 @@ const PostDetailsPage = () => {
           <div className="post-header">
             <PostImage url={postInfo.image}></PostImage>
             <div className="post-info">
-              <PostCategory>{postInfo.category?.name}</PostCategory>
+              <PostCategory to={postInfo.category?.slug}>{postInfo.category?.name}</PostCategory>
               <h1 className="post-title">{postInfo.title}</h1>
               <PostMeta
-                to={slugify(user?.fullname)}
+                to={slugify(user?.username)}
                 author={user?.fullname}
                 date={formatDate}
               ></PostMeta>

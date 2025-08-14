@@ -26,16 +26,16 @@ const PostItemStyles = styled.div`
 `;
 const PostItem = ({ data }) => {
   if(!data) return;
-  console.log("data ~", data);
+  // console.log("data ~", data);
   const date = new Date(data.createdAt?.seconds * 1000);
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostItemStyles>
-      <PostImage url={data?.image}></PostImage>
-      <PostCategory>{data?.category?.name}</PostCategory>
-      <PostTitle>{data?.title}</PostTitle>
+      <PostImage to={data.slug} url={data.image}></PostImage>
+      <PostCategory to={data.category?.slug} >{data.category?.name}</PostCategory>
+      <PostTitle to={data.slug}>{data.title}</PostTitle>
       <PostMeta
-        to={slugify(data.user?.fullname)}
+        to={slugify(data.user?.username)}
         author={data.user?.fullname}
         date={formatDate}
       ></PostMeta>
