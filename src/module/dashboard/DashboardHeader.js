@@ -1,6 +1,6 @@
 import { Button } from "components/button";
+import { useAuth } from "contexts/auth-context";
 import React from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const DashboardHeaderStyles = styled.div`
   background-color: white;
@@ -22,6 +22,7 @@ const DashboardHeaderStyles = styled.div`
 `;
 
 const DashboardHeader = () => {
+  const {userInfo} = useAuth();
   return (
     <DashboardHeaderStyles>
       <Button to="/manage/add-post" className="header-button" height="52px">
@@ -29,7 +30,7 @@ const DashboardHeader = () => {
       </Button>
       <div className="header-avatar">
         <img
-          src="https://res.cloudinary.com/dqpdddmjn/image/upload/v1754211996/monkey-blogging/ohzpic1dttinqhfrzb8r.jpg"
+          src={userInfo?.avatar}
           alt=""
         />
       </div>

@@ -1,8 +1,8 @@
 import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import LabelStatus from "components/label/LabelStatus";
-import { Pagination } from "components/pagination";
 import { Table } from "components/table";
+import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { postStatus } from "utils/constants";
+import { postStatus, userRole } from "utils/constants";
 const POST_PER_PAGE = 4;
 const PostManage = () => {
   const navigate = useNavigate();
@@ -118,6 +118,8 @@ const PostManage = () => {
         break;
     }
   };
+  const {userInfo} = useAuth();
+  if(userInfo.role !== userRole.ADMIN) return;
   return (
     <div>
       <DashboardHeading
