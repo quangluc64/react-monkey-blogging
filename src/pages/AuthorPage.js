@@ -43,10 +43,10 @@ const AuthorPage = () => {
   if (!slug) return <NotFoundPage />;
   return (
     <Layout>
-      <div className="container">
+      <div className="container pb-10">
         <h2
           className="mb-5 text-2xl font-semibold text-secondary"
-          style={{ color: "#23bb86" }}
+          style={{ color: "#23bb86", fontFamily: "Poppins, sans-serif" }}
         >
           {postList.length > 0
             ? `Author: ${postList[0]?.user?.fullname}`

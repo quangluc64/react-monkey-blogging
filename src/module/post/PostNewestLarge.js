@@ -5,6 +5,7 @@ import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import slugify from "react-slugify";
 const PostNewestLargeStyles = styled.div`
   /* max-width: 570px; */
   .post-img {
@@ -21,13 +22,20 @@ const PostNewestLargeStyles = styled.div`
     margin-top: 10px;
   }
 `;
-const PostNewestLarge = () => {
+const PostNewestLarge = ({ data }) => {
+  if (!data?.id) return;
+  const date = new Date(data.createdAt?.seconds * 1000);
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostNewestLargeStyles>
-      <PostImage url={homeNewestLargeImg}></PostImage>
-      <PostCategory>Kiến thức</PostCategory>
-      <PostTitle size="large">Hướng dẫn setup phòng cực chill dành cho người mới toàn tập</PostTitle>
-      <PostMeta></PostMeta>
+      <PostImage to={data?.slug} url={data?.image}></PostImage>
+      <PostCategory to={data?.category?.slug}>{data?.category?.name}</PostCategory>
+      <PostTitle to={data?.slug} size="large">{data.title}</PostTitle>
+      <PostMeta
+        to={slugify(data?.user?.username)}
+        author={data?.user?.fullname}
+        date={formatDate}
+      ></PostMeta>
     </PostNewestLargeStyles>
   );
 };

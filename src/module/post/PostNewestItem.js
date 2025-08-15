@@ -5,6 +5,7 @@ import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
 import PostImage from "./PostImage";
+import slugify from "react-slugify";
 const PostNewestItemStyles = styled.div`
   display: flex;
   align-items: center;
@@ -35,16 +36,21 @@ const PostNewestItemStyles = styled.div`
     }
   }
 `;
-const PostNewestItem = () => {
+const PostNewestItem = ({ data }) => {
+  if (!data?.id) return;
+  const date = new Date(data.createdAt?.seconds * 1000);
+  const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostNewestItemStyles>
-      <PostImage url={homeNewestItemImg}></PostImage>
+      <PostImage to={data?.slug} url={data?.image}></PostImage>
       <div className="post-content">
-        <PostCategory type="secondary">Kiến thức</PostCategory>
-        <PostTitle>
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-        </PostTitle>
-        <PostMeta></PostMeta>
+        <PostCategory to={data?.category?.slug} type="secondary">{data?.category?.name}</PostCategory>
+        <PostTitle to={data?.slug}>{data?.title}</PostTitle>
+        <PostMeta
+          to={slugify(data?.user?.username)}
+          author={data?.user?.fullname}
+          date={formatDate}
+        ></PostMeta>
       </div>
     </PostNewestItemStyles>
   );

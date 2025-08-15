@@ -10,27 +10,38 @@ const HomeBannerStyles = styled.div`
     ${(props) => props.theme.primary},
     ${(props) => props.theme.secondary}
   );
-  .banner{
+  .banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .banner-content{
+  .banner-content {
     max-width: 450px;
   }
-  .banner-heading{
+  .banner-heading {
     margin-bottom: 30px;
     font-size: 48px;
     font-weight: 700;
     color: #fff;
   }
-  .banner-desc{
+  .banner-desc {
     margin-bottom: 40px;
     line-height: 2;
     color: #fff;
   }
-  .banner-button{
+  .banner-button {
     margin-left: 0;
+  }
+  .banner-img {
+    width: 100%;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .banner-img img {
+    max-height: 100%; 
+    transform: translateX(25%);
   }
 `;
 const HomeBanner = () => {
@@ -46,10 +57,15 @@ const HomeBanner = () => {
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi.
             </p>
-            <Button to="/sign-up" kind="secondary" className="banner-button">Get started</Button>
+            <Button to="/sign-up" kind="secondary" className="banner-button">
+              Get started
+            </Button>
           </div>
           <div className="banner-img">
-            <img src={`${process.env.PUBLIC_URL}/img-banner.png`} alt="banner" />
+            <img
+              src={`${process.env.PUBLIC_URL}/img-banner.png`}
+              alt="banner"
+            />
           </div>
         </div>
       </div>

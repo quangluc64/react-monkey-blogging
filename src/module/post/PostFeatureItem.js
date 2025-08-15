@@ -44,10 +44,8 @@ const PostFeatureItemStyles = styled.div`
   }
 `;
 const PostFeatureItem = ({ data }) => {
-  console.log("data ~", data);
   // const [category, setCategory] = useState();
   // const [user, setUser] = useState("");
-  console.log("data ~", data);
   const { user, category } = data;
   // ** Fetch Categories **
   // useEffect(() => {

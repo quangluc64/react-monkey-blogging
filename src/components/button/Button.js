@@ -2,7 +2,7 @@ import { LoadingSpinner } from "components/loading";
 import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 const ButtonStyles = styled.button`
   cursor: pointer;
   /* width: 100%; */
@@ -58,11 +58,11 @@ const Button = ({
   const child = isLoading ? <LoadingSpinner></LoadingSpinner> : children;
   if (to !== "" && typeof to === "string")
     return (
-      <NavLink to={to}>
+      <Link to={to}>
         <ButtonStyles type={type} kind={kind} {...props}>
           {child}
         </ButtonStyles>
-      </NavLink>
+      </Link>
     );
   return (
     <ButtonStyles type={type} kind={kind} onClick={onClick} {...props}>
@@ -75,5 +75,8 @@ Button.propTypes = {
   isLoading: PropTypes.bool,
   children: PropTypes.node,
   onClick: PropTypes.func,
+  kind: PropTypes.oneOf(["primary", "secondary", "ghost"]), // Kiểu button
+  height: PropTypes.string, // Chiều cao (ví dụ: "50px")
+  to: PropTypes.string, // Đường dẫn nếu dùng NavLink
 };
 export default Button;

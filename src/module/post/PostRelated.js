@@ -1,14 +1,14 @@
 import Heading from "components/layout/Heading";
 import React, { useEffect, useState } from "react";
 import PostItem from "./PostItem";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 
 const PostRelated = ({ categoryId }) => {
   const [postList, setPostList] = useState([]);
   useEffect(() => {
     const colRef = collection(db, "posts");
-    const queries = query(colRef, where("category.id", "==", categoryId));
+    const queries = query(colRef, where("category.id", "==", categoryId), orderBy("createdAt", "desc"),);
     onSnapshot(queries, (snapshot) => {
       let results = [];
       snapshot.forEach((doc) => {

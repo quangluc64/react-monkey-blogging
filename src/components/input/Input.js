@@ -2,6 +2,7 @@
 import React from "react";
 import { useController } from "react-hook-form";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 const InputStyles = styled.div`
   position: relative;
   width: 100%;
@@ -44,5 +45,10 @@ const Input = ({
     </InputStyles>
   );
 };
+Input.propTypes = {
+  name: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  control: PropTypes.any.isRequired
+}
 export default Input;
 
