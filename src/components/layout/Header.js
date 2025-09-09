@@ -1,6 +1,6 @@
 import { Button } from "components/button";
 import { useAuth } from "contexts/auth-context";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const menuLinks = [
@@ -65,10 +65,62 @@ const HeaderStyles = styled.div`
   .header-button {
     margin-right: 0;
   }
+  .mobile-menu-icon {
+    display: none; 
+  }
+  @media screen and (max-width: 1023.98px) {
+    .search,
+    .header-button {
+      display: none;
+    }
+    .mobile-menu-icon {
+      display: block;
+      margin-left: auto;
+      cursor: pointer;
+    }
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 20px;
+      z-index: 999;
+      transform: translateX(0);
+      transition: transform 0.3s ease-in-out;
+    }
+    .mobile-close {
+      align-self: flex-end;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .mobile-menu a {
+      font-size: 18px;
+      font-weight: 500;
+      padding: 10px 0;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 999;
+    }
+  }
+  @media screen and (max-width: 767.98px) {
+    .menu {
+      display: none;
+    }
+  }
 `;
 const Header = () => {
   const { userInfo } = useAuth();
   // console.log("userInfo", userInfo);
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <HeaderStyles>
       <div className="container">
@@ -157,8 +209,54 @@ const Header = () => {
               </Button>
             </div>
           )}
+          {/* Hamburger icon mobile */}
+          <span className="mobile-menu-icon" onClick={() => setMenuOpen(true)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </span>
         </div>
       </div>
+      {/* Mobile Drawer Menu */}
+      {menuOpen && (
+        <>
+          <div className="overlay" onClick={() => setMenuOpen(false)}></div>
+          <div className="mobile-menu">
+            <span className="mobile-close" onClick={() => setMenuOpen(false)}>
+              ✕
+            </span>
+            {menuLinks.map((item, index) => (
+              <NavLink
+                key={index}
+                to={item.url}
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.title}
+              </NavLink>
+            ))}
+            {!userInfo ? (
+              <Button to="/sign-in" type="button" height="40px">
+                Sign Up
+              </Button>
+            ) : (
+              <Button to="/dashboard" type="button" height="40px">
+                Dashboard
+              </Button>
+            )}
+          </div>
+        </>
+      )}
     </HeaderStyles>
   );
 };

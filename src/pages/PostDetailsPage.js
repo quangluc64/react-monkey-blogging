@@ -8,12 +8,7 @@ import PostMeta from "module/post/PostMeta";
 // import postDetailAuthor from "assets/images/post-detail-author.jpeg";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import parse from "html-react-parser";
 import slugify from "react-slugify";
@@ -88,6 +83,22 @@ const PostDetailsPageStyles = styled.div`
       line-height: 28px;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    .post-header {
+      flex-direction: column;
+      .post-img {
+        height: auto;
+      }
+    }
+
+    .author {
+      flex-direction: column;
+      padding: 20px;
+      &-img {
+        width: 100%;
+      }
+    }
+  }
 `;
 const PostDetailsPage = () => {
   const { slug } = useParams();
@@ -108,10 +119,10 @@ const PostDetailsPage = () => {
   }, [slug]);
   useEffect(() => {
     // window.scroll(0, 0)
-    document.body.scrollIntoView({behavior: "smooth", block: "start"})
-  },[slug])
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [slug]);
   if (!slug) return <NotFoundPage></NotFoundPage>;
-  if(!postInfo?.title) return;
+  if (!postInfo?.title) return;
   return (
     <Layout>
       <PostDetailsPageStyles>
@@ -119,7 +130,9 @@ const PostDetailsPage = () => {
           <div className="post-header">
             <PostImage url={postInfo.image}></PostImage>
             <div className="post-info">
-              <PostCategory to={postInfo.category?.slug}>{postInfo.category?.name}</PostCategory>
+              <PostCategory to={postInfo.category?.slug}>
+                {postInfo.category?.name}
+              </PostCategory>
               <h1 className="post-title">{postInfo.title}</h1>
               <PostMeta
                 to={slugify(user?.username)}

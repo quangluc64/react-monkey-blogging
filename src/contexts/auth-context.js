@@ -9,17 +9,25 @@ function AuthProvider(props) {
   const value = { userInfo, setUserInfo };
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      const colRef = query(collection(db, "users"), where("email", "==", user.email));
-      onSnapshot(colRef, snapshot => {
+      if (!user) {
+        // Đăng xuất → reset state
+        setUserInfo(null);
+        return;
+      }
+      const colRef = query(
+        collection(db, "users"),
+        where("email", "==", user.email)
+      );
+      onSnapshot(colRef, (snapshot) => {
         snapshot.forEach((doc) => {
           setUserInfo({
             ...user,
             ...doc.data(),
           });
-        })
-      })
-    })
-  },[])
+        });
+      });
+    });
+  }, []);
   return <AuthContext.Provider value={value} {...props}></AuthContext.Provider>;
 }
 function useAuth() {

@@ -1,7 +1,9 @@
 import Heading from "components/layout/Heading";
+import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -25,12 +27,23 @@ const HomeNewestStyles = styled.div`
     background-color: #f3edff;
     border-radius: 12px;
   }
+  @media screen and (max-width: 1023.98px) {
+    .layout {
+      grid-template-columns: 100%;
+    }
+    .sidebar {
+      padding: 30px;
+    }
+  }
 `;
 const HomeNewest = () => {
+  const { userInfo } = useAuth();
+  console.log("userInfo ~", userInfo);
   const [posts, setPosts] = useState([]);
   const [similarPosts, setSimilarPosts] = useState([]);
   // Fetch Newest Posts
   useEffect(() => {
+    if (!userInfo?.email) return;
     const colRef = collection(db, "posts");
     const queries = query(
       colRef,
@@ -48,21 +61,22 @@ const HomeNewest = () => {
       });
       setPosts(results);
     });
-  }, []);
+  }, [userInfo]);
   const [first, ...others] = posts;
   // Fetch Similar Posts
   useEffect(() => {
     if (!first?.category?.id) return;
-    const colRef = collection(db, "posts");
-    const queries = query(
-      colRef,
-      where("category.id", "==", first.category.id),
-      orderBy("createdAt", "desc"),
-      limit(4)
-    );
-    const unsubscribe = onSnapshot(queries, (snapshot) => {
+    async function fetchPosts() {
+      const colRef = collection(db, "posts");
+      const queries = query(
+        colRef,
+        where("category.id", "==", first.category.id),
+        orderBy("createdAt", "desc"),
+        limit(4)
+      );
+      const querySnapshot = await getDocs(queries);
       let results = [];
-      snapshot.forEach((doc) => {
+      querySnapshot.forEach((doc) => {
         results.push({
           id: doc.id,
           ...doc.data(),
@@ -71,14 +85,11 @@ const HomeNewest = () => {
       // Loại bỏ bài viết đang là "first"
       results = results.filter((item) => item.id !== first.id);
       setSimilarPosts(results);
-    });
-    // Cleanup function !!!
-    return () => {
-      console.log("Cleaning up listener");
-      unsubscribe();
-    };
-  }, [first?.category?.id]);
+    }
+    fetchPosts();
+  }, [first?.category?.id, first?.id]);
   // console.log("similarPosts ~", similarPosts);
+  if (!userInfo?.email) return;
   return (
     <HomeNewestStyles className="home-block">
       <div className="container">
@@ -91,6 +102,7 @@ const HomeNewest = () => {
             ))}
           </div>
         </div>
+
         <div className="grid-layout grid-layout--primary">
           {similarPosts.map((post) => (
             <PostItem key={post.id} data={post}></PostItem>

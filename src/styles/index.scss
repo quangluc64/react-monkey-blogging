@@ -57,8 +57,10 @@ body {
   color: "#232323";
 }
 .container {
-  width: 100%;
-  max-width: 1180px;
+  // width: 100%;
+  // max-width: 1180px;
+  width: 1180px;
+  max-width: calc(100% - 40px);
   margin: 0 auto;
   // padding: 0px 20px;
 }
@@ -72,8 +74,22 @@ body {
 .grid-layout {
   display: grid;
   gap: 50px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  &--primary {
+  @media screen and (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media screen and (max-width: 1023.98px) {
+    gap: 20px;
+    grid-auto-columns: 300px;
+    grid-auto-flow: column;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+  }
+  & > * {
+    scroll-snap-align: start; // Xác định điểm neo (snap point) của item khi cuộn
+  }
+}
+.grid-layout--primary {
+  @media screen and (min-width: 1024px) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -89,5 +105,5 @@ body {
   white-space: nowrap;
 }
 .form-layout {
-  @apply grid grid-cols-2 gap-x-10;
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-x-10 mb-10;
 }

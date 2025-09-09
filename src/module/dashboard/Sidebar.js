@@ -34,9 +34,27 @@ const SidebarStyles = styled.div`
       color: ${(props) => props.theme.primary};
     }
   }
+  .close-btn{
+    display: none;
+  }
+  @media screen and (max-width: 1023.98px) {
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    transform: translateX(-100%);
+    &.open {
+      transform: translateX(0);
+    }
+    .close-btn{
+      display: block;
+    }
+  }
 `;
 
-const Sidebar = () => {
+const Sidebar = ({ open, setOpen }) => {
+  console.log("open ~", open);
   const navigate = useNavigate();
   const sidebarLinks = [
     {
@@ -143,10 +161,10 @@ const Sidebar = () => {
   ];
   const handleLogout = async () => {
     await signOut(auth);
-    navigate("/sign-in")
+    navigate("/sign-in");
   };
   return (
-    <SidebarStyles className="sidebar">
+    <SidebarStyles className={`sidebar ${open ? "open" : ""}`}>
       <div className="sidebar-logo">
         <NavLink to="/">
           <img
@@ -156,6 +174,8 @@ const Sidebar = () => {
           />
         </NavLink>
         <span>Monkey Blogging</span>
+        {/* Nút close chỉ hiển thị trên mobile */}
+        <span className="close-btn cursor-pointer" onClick={() => setOpen(false)}>✕</span>
       </div>
       {sidebarLinks.map((link) => {
         if (link.onClick)

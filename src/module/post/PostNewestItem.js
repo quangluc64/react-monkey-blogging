@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import homeNewestItemImg from "assets/images/home-newest-item.jfif";
+// import homeNewestItemImg from "assets/images/home-newest-item.jfif";
 import PostCategory from "./PostCategory";
 import PostTitle from "./PostTitle";
 import PostMeta from "./PostMeta";
@@ -35,6 +35,26 @@ const PostNewestItemStyles = styled.div`
       margin-top: 10px;
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    /* flex-direction: column; */
+    .post {
+      &-img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023.98px) {
+    flex-direction: row;
+    .post {
+      &-img {
+        width: 400px;
+      }
+    }
+  }
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+  }
 `;
 const PostNewestItem = ({ data }) => {
   if (!data?.id) return;
@@ -42,9 +62,11 @@ const PostNewestItem = ({ data }) => {
   const formatDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <PostNewestItemStyles>
-      <PostImage to={data?.slug} url={data?.image}></PostImage>
+      <PostImage to={data?.slug} url={data?.image} className="post-img"></PostImage>
       <div className="post-content">
-        <PostCategory to={data?.category?.slug} type="secondary">{data?.category?.name}</PostCategory>
+        <PostCategory to={data?.category?.slug} type="secondary">
+          {data?.category?.name}
+        </PostCategory>
         <PostTitle to={data?.slug}>{data?.title}</PostTitle>
         <PostMeta
           to={slugify(data?.user?.username)}

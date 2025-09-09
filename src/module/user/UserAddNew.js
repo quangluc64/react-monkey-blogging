@@ -85,7 +85,7 @@ const UserAddNew = () => {
         onDelete={handleDeleteImage}
       ></ImageUpload>
       <form onSubmit={handleSubmit(handleCreateUser)}>
-        <div className="grid grid-cols-2 gap-x-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 mb-10 sm:mb-0">
           <Field>
             <Label htmlFor="fullname">Fullname</Label>
             <Input
@@ -105,7 +105,7 @@ const UserAddNew = () => {
             ></Input>
           </Field>
         </div>
-        <div className="grid grid-cols-2 gap-x-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 mb-10 sm:mb-0">
           <Field>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -125,7 +125,7 @@ const UserAddNew = () => {
             ></Input>
           </Field>
         </div>
-        <div className="grid grid-cols-2 gap-x-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 mb-10 sm:mb-0">
           <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">

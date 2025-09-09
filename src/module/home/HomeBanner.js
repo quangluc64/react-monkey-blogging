@@ -33,15 +33,29 @@ const HomeBannerStyles = styled.div`
     margin-left: 0;
   }
   .banner-img {
+    padding-right: 10%;
     width: 100%;
     height: 440px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
   .banner-img img {
-    max-height: 100%; 
-    transform: translateX(25%);
+    max-height: 100%;
+    /* transform: translateX(25%); */
+  }
+  @media screen and (max-width: 1023.98px) {
+    .banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &-img {
+        display: none;
+      }
+    }
+    .banner-content {
+      max-width: 90%;
+    }
   }
 `;
 const HomeBanner = () => {
@@ -55,7 +69,8 @@ const HomeBanner = () => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi.
+              nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. 
             </p>
             <Button to="/sign-up" kind="secondary" className="banner-button">
               Get started

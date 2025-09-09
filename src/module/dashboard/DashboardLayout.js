@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import DashboardHeader from "./DashboardHeader";
@@ -22,17 +22,32 @@ const DashboardStyles = styled.div`
       padding: 40px 20px;
       gap: 0 40px;
       align-items: start;
+      @media screen and (max-width: 1023.98px) {
+        display: block;
+      }
     }
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
   }
 `;
 const DashboardLayout = () => {
-  const {userInfo} = useAuth();
-  if(!userInfo) return <NotFoundPage></NotFoundPage>
+  const { userInfo } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  if (!userInfo) return <NotFoundPage></NotFoundPage>;
   return (
     <DashboardStyles>
-      <DashboardHeader></DashboardHeader>
+      <DashboardHeader setSidebarOpen={setSidebarOpen}></DashboardHeader>
       <div className="dashboard-main">
-        <Sidebar></Sidebar>
+        {sidebarOpen && (
+          <div
+            className="overlay"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          ></div>
+        )}
+        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen}></Sidebar>
         <div className="dashboard-children">
           <Outlet></Outlet>
         </div>

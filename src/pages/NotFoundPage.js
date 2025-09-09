@@ -2,19 +2,20 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const NotFoundPageStyles = styled.div`
+  padding: 20px 20px 100px;
   display: flex;
   gap: 30px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: ${props => props.theme.black};
+  background-color: ${(props) => props.theme.black};
   color: white;
   .heading {
     font-size: 60px;
     font-weight: bold;
   }
-  .description{
+  .description {
     max-width: 800px;
     text-align: center;
     line-height: 1.7;
@@ -25,6 +26,12 @@ const NotFoundPageStyles = styled.div`
     color: #fff;
     border-radius: 10px;
     font-weight: 500;
+  }
+  @media screen and (max-width: 1023.98px){
+    height: auto;
+    .heading{
+      font-size: 40px;
+    }
   }
 `;
 const NotFoundPage = () => {
@@ -44,7 +51,9 @@ const NotFoundPage = () => {
         Chances are your spelled something wrong, so can you double check the
         URL?
       </p>
-      <button onClick={() => navigate("/")}  className="back">Go back</button>
+      <button onClick={() => navigate("/")} className="back">
+        Go back
+      </button>
     </NotFoundPageStyles>
   );
 };
