@@ -2,6 +2,7 @@ import { ActionDelete, ActionEdit, ActionView } from "components/action";
 import { Button } from "components/button";
 import LabelStatus from "components/label/LabelStatus";
 import { Table } from "components/table";
+import { useAuth } from "contexts/auth-context";
 import { db } from "firebase-app/firebase-config";
 import {
   collection,
@@ -19,7 +20,7 @@ import DashboardHeading from "module/dashboard/DashboardHeading";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { categoryStatus } from "utils/constants";
+import { categoryStatus, userRole } from "utils/constants";
 
 const CATEGORY_PER_PAGE = 10;
 
@@ -106,6 +107,8 @@ const CategoryManage = () => {
   const handleInputFilter = debounce((e) => {
     setFilter(e.target.value);
   }, 1000);
+  const {userInfo} = useAuth();
+  if(userInfo.role !== userRole.ADMIN) return;
   return (
     <div>
       <DashboardHeading title="Categories" desc="Manage your category">
